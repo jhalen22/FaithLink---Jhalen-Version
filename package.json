@@ -2,7 +2,7 @@
   "name": "faithlink",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "expo-router/entry",
   "scripts": {
     "backend": "cd backend && node server.js",
     "frontend": "cd frontend && npm run dev",
@@ -14,6 +14,11 @@
   "type": "commonjs",
   "dependencies": {
     "concurrently": "^9.2.1",
+    "expo": "^55.0.23",
+    "expo-router": "^55.0.14",
+    "react-dom": "^19.2.5",
+    "react-native": "^0.85.3",
+    "react-native-web": "^0.21.2",
     "react-router-dom": "^7.15.0"
   }
 }
