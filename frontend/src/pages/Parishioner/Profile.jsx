@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../styles/Profile.css";
+import "../../styles/Parishioner/Profile.css";
 
 function Profile() {
   const navigate = useNavigate();

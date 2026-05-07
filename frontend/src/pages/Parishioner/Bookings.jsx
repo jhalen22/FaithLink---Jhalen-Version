@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../styles/Bookings.css";
+import "../../styles/Parishioner/Bookings.css";
 
 function Bookings() {
   const navigate = useNavigate();

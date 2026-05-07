@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "../styles/Events.css";
+import "../../styles/Parishioner/Events.css";
 
 function Events() {
   const navigate = useNavigate();

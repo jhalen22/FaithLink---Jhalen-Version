@@ -1,0 +1,283 @@
+.pageWrapper {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f2f5;
+  padding: 16px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.card {
+  width: 100%;
+  max-width: 380px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  margin: auto;
+}
+
+/* ── Header ── */
+.header {
+  background:#326cd0;
+  padding: 36px 24px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.iconCircle {
+  width: 68px;
+  height: 68px;
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconCircle svg {
+  width: 36px;
+  height: 36px;
+  color: #7c3aed;
+}
+
+.headerTitle {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+}
+
+.headerSubtitle {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.88);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ── Form body ── */
+.body {
+  padding: 24px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* First name + Last name row */
+.nameRow {
+  display: flex;
+  gap: 10px;
+}
+
+.nameRow .fieldGroup {
+  flex: 1;
+  min-width: 0;
+}
+
+/* City + Province row */
+.addressRow {
+  display: flex;
+  gap: 10px;
+}
+
+.addressRow .fieldGroup {
+  flex: 1;
+  min-width: 0;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  width: 100%;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Plain input (no icon) */
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #111827;
+  background: #f9fafb;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+
+.input::placeholder {
+  color: #9ca3af;
+}
+
+.input:focus {
+  border-color: #7c3aed;
+  background: #ffffff;
+}
+
+/* Input with leading icon */
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputWrapper .leadIcon {
+  position: absolute;
+  left: 11px;
+  width: 16px;
+  height: 16px;
+  color: #9ca3af;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.inputWithIcon {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #111827;
+  background: #f9fafb;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+
+.inputWithIcon::placeholder {
+  color: #9ca3af;
+}
+
+.inputWithIcon:focus {
+  border-color: #7c3aed;
+  background: #ffffff;
+}
+
+/* Password: icon left + eye right */
+.inputWithIconAndEye {
+  width: 100%;
+  padding: 10px 40px 10px 36px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #111827;
+  background: #f9fafb;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+  font-family: inherit;
+}
+
+.inputWithIconAndEye::placeholder {
+  color: #9ca3af;
+}
+
+.inputWithIconAndEye:focus {
+  border-color: #7c3aed;
+  background: #ffffff;
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  color: #9ca3af;
+}
+
+.eyeBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Terms checkbox */
+.termsLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: #6b7280;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.5;
+}
+
+.termsLabel input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: #326cd0;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── Submit button ── */
+.submitBtn {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  background: #326cd0;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: opacity 0.2s;
+  margin-top: 2px;
+}
+
+.submitBtn:hover {
+  opacity: 0.9;
+}
+
+.submitBtn:active {
+  opacity: 0.8;
+}
+
+/* ── Sign in link ── */
+.signinRow {
+  text-align: center;
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 2px;
+  padding-bottom: 4px;
+}
+
+.signinLink {
+  font-weight: 600;
+  color: #326cd0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.signinLink:hover {
+  text-decoration: underline;
+}

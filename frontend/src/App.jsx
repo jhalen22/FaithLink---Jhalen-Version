@@ -1,25 +1,30 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "./App.css";
+import "./styles/App.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import Bookings from "./pages/Bookings";
-import SelectService from "./pages/SelectService";
-import BookingForm from "./pages/BookingForm";
-import Donation from "./pages/Donation";
-import Profile from "./pages/Profile";
-import Events from "./pages/Events";
-import LiveMass from "./pages/LiveMass";
-import PriestDashboard from "./pages/PriestDashboard";
-import PriestSchedules from "./pages/PriestSchedules";
-import PriestSeminars from "./pages/PriestSeminars";
-import PriestBookings from "./pages/PriestBookings";
-import PriestAlerts from "./pages/PriestAlerts";
-import PersonalInformation from "./pages/PersonalInformation";
-import DonationHistory from "./pages/DonationHistory";
-import MassIntentions from "./pages/MassIntentions";
-import Settings from "./pages/Settings";
-import Notifications from "./pages/Notifications";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import ManageBookings from "./pages/Admin/ManageBookings";
+import ManageDonations from "./pages/Admin/ManageDonations";
+import ManageParishioners from "./pages/Admin/ManageParishioners";
+import ManageStreams from "./pages/Admin/ManageStreams";
+import PriestDashboard from "./pages/Priest/PriestDashboard";
+import PriestSchedules from "./pages/Priest/PriestSchedules";
+import PriestSeminars from "./pages/Priest/PriestSeminars";
+import PriestBookings from "./pages/Priest/PriestBookings";
+import PriestAlerts from "./pages/Priest/PriestAlerts";
+import Dashboard from "./pages/Parishioner/Dashboard";
+import Bookings from "./pages/Parishioner/Bookings";
+import SelectService from "./pages/Parishioner/SelectService";
+import BookingForm from "./pages/Parishioner/BookingForm";
+import Donation from "./pages/Parishioner/Donation";
+import Profile from "./pages/Parishioner/Profile";
+import Events from "./pages/Parishioner/Events";
+import LiveMass from "./pages/Parishioner/LiveMass";
+import PersonalInformation from "./pages/Parishioner/PersonalInformation";
+import DonationHistory from "./pages/Parishioner/DonationHistory";
+import MassIntentions from "./pages/Parishioner/MassIntentions";
+import Settings from "./pages/Parishioner/Settings";
+import Notifications from "./pages/Parishioner/Notifications";
 
 function App() {
   return (
@@ -28,6 +33,11 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/bookings" element={<ManageBookings />} />
+        <Route path="/admin/donations" element={<ManageDonations />} />
+        <Route path="/admin/parishioners" element={<ManageParishioners />} />
+        <Route path="/admin/streams" element={<ManageStreams />} />
         <Route path="/bookings" element={<Bookings />} />
         <Route path="/select-service" element={<SelectService />} />
         <Route path="/booking-form" element={<BookingForm />} />
