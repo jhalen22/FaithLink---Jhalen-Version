@@ -1,5 +1,6 @@
 const express = require("express");
-const Booking = require("../models/Booking");
+const Booking = require("../models/Booking")
+const Notification = require("../models/Notification");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 
 const router = express.Router();
@@ -35,6 +36,20 @@ router.post("/", protect, async (req, res) => {
   }
 });
 
+router.get("/my-bookings", protect, async (req, res) => {
+  try {
+    const bookings = await Booking.find({
+      parishioner: req.user.id,
+    });
+
+    res.json(bookings);
+  } catch (err) {
+    res.status(500).json({
+      message: "Error fetching bookings",
+    });
+  }
+});
+
 // GET ALL BOOKINGS - admin only
 router.get("/", protect, adminOnly, async (req, res) => {
   try {
@@ -56,46 +71,70 @@ router.get("/", protect, adminOnly, async (req, res) => {
   }
 });
 
-// ✅ ADD THIS — APPROVE BOOKING
+// APPROVE BOOKING
 router.put("/:id/approve", protect, adminOnly, async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.id);
 
     if (!booking) {
-      return res.status(404).json({ message: "Booking not found" });
+      return res.status(404).json({
+        message: "Booking not found",
+      });
     }
 
     booking.status = "approved";
     await booking.save();
 
+    await Notification.create({
+      user: booking.parishioner,
+      title: "Booking Approved",
+      message: `Your ${booking.sacramentType} booking has been approved.`,
+      type: "booking",
+    });
+
     res.json({
       message: "Booking approved",
-      booking
+      booking,
     });
+
   } catch (error) {
-    res.status(500).json({ message: "Error approving booking" });
+    res.status(500).json({
+      message: "Error approving booking",
+    });
   }
 });
 
 
-// ✅ ADD THIS — REJECT BOOKING
+// REJECT BOOKING
 router.put("/:id/reject", protect, adminOnly, async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.id);
 
     if (!booking) {
-      return res.status(404).json({ message: "Booking not found" });
+      return res.status(404).json({
+        message: "Booking not found",
+      });
     }
 
     booking.status = "rejected";
     await booking.save();
 
+    await Notification.create({
+      user: booking.parishioner,
+      title: "Booking Rejected",
+      message: `Your ${booking.sacramentType} booking has been rejected.`,
+      type: "booking",
+    });
+
     res.json({
       message: "Booking rejected",
-      booking
+      booking,
     });
+
   } catch (error) {
-    res.status(500).json({ message: "Error rejecting booking" });
+    res.status(500).json({
+      message: "Error rejecting booking",
+    });
   }
 });
 

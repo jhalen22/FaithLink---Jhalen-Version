@@ -45,7 +45,6 @@ function Register() {
       alert("Registered successfully!");
       navigate("/");
     } catch (err) {
-      console.log(err.response?.data || err.message);
       alert(err.response?.data?.message || "Error registering");
     }
   };
@@ -53,7 +52,6 @@ function Register() {
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.card}>
-        {/* Header */}
         <div className={styles.header}>
           <div className={styles.iconCircle}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -68,9 +66,7 @@ function Register() {
           </p>
         </div>
 
-        {/* Form */}
         <form className={styles.body} onSubmit={handleSubmit}>
-          {/* First + Last name */}
           <div className={styles.nameRow}>
             <div className={styles.fieldGroup}>
               <label className={styles.label}>First Name</label>
@@ -94,7 +90,6 @@ function Register() {
             </div>
           </div>
 
-          {/* Email */}
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Email Address</label>
             <div className={styles.inputWrapper}>
@@ -114,7 +109,6 @@ function Register() {
             </div>
           </div>
 
-          {/* Phone */}
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Phone Number</label>
             <div className={styles.inputWrapper}>
@@ -132,7 +126,6 @@ function Register() {
             </div>
           </div>
 
-          {/* Street Address */}
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Street Address</label>
             <div className={styles.inputWrapper}>
@@ -150,7 +143,6 @@ function Register() {
             </div>
           </div>
 
-          {/* City + Province */}
           <div className={styles.addressRow}>
             <div className={styles.fieldGroup}>
               <label className={styles.label}>City</label>
@@ -174,7 +166,6 @@ function Register() {
             </div>
           </div>
 
-          {/* ZIP Code */}
           <div className={styles.fieldGroup}>
             <label className={styles.label}>ZIP Code</label>
             <input
@@ -186,7 +177,6 @@ function Register() {
             />
           </div>
 
-          {/* Password */}
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Password</label>
             <div className={styles.inputWrapper}>
@@ -225,7 +215,6 @@ function Register() {
             </div>
           </div>
 
-          {/* Confirm Password */}
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Confirm Password</label>
             <div className={styles.inputWrapper}>
@@ -264,7 +253,6 @@ function Register() {
             </div>
           </div>
 
-          {/* Terms */}
           <label className={styles.termsLabel}>
             <input
               type="checkbox"

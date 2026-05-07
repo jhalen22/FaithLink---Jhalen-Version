@@ -1,0 +1,52 @@
+.priest-welcome {
+  background: white;
+  padding: 18px;
+  border-bottom: 1px solid #ddd;
+}
+
+.priest-welcome h2 {
+  margin: 0;
+  color: #244f99;
+  font-size: 22px;
+}
+
+.priest-welcome p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.priest-schedule-list {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.priest-schedule-card {
+  background: #f7f9ff;
+  border-left: 5px solid #244f99;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.priest-schedule-card h4 {
+  margin: 0 0 8px;
+  color: #244f99;
+}
+
+.priest-schedule-card p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #4f5f76;
+}
+
+.priest-schedule-card button {
+  margin-top: 10px;
+  width: 100%;
+  background: #244f99;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+}

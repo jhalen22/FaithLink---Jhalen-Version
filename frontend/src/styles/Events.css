@@ -1,0 +1,14 @@
+.events-page {
+  background: #eef4fb;
+  min-height: 100vh;
+  padding: 16px;
+  padding-bottom: 90px;
+}
+
+.event-card {
+  background: white;
+  border-radius: 16px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}

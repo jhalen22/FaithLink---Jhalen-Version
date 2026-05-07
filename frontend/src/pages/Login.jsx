@@ -16,22 +16,35 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", form);
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        form
+      );
+
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("fullName", res.data.user.fullName);
+      localStorage.setItem("email", res.data.user.email);
+      localStorage.setItem("role", res.data.user.role);
+
       alert("Login successful!");
-      navigate("/dashboard");
-    } catch {
-      alert("Invalid credentials");
+
+      if (res.data.user.role === "priest") {
+        navigate("/priest-dashboard");
+      } else if (res.data.user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || "Invalid credentials");
     }
   };
 
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.card}>
-        {/* Header */}
         <div className={styles.header}>
           <div className={styles.iconCircle}>
-            {/* Church / faith icon */}
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 22V10l9-8 9 8v12H3z" />
               <rect x="9" y="14" width="6" height="8" />
@@ -42,9 +55,7 @@ function Login() {
           <h2 className={styles.headerTitle}>FaithLink</h2>
         </div>
 
-        {/* Form */}
         <form className={styles.body} onSubmit={handleSubmit}>
-          {/* Username or Email */}
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Username or Email</label>
             <div className={styles.inputWrapper}>
@@ -64,7 +75,6 @@ function Login() {
             </div>
           </div>
 
-          {/* Password */}
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Password</label>
             <div className={styles.inputWrapper}>
@@ -104,7 +114,6 @@ function Login() {
             </div>
           </div>
 
-          {/* Remember me / Forgot password */}
           <div className={styles.row}>
             <label className={styles.checkLabel}>
               <input
@@ -123,12 +132,10 @@ function Login() {
             </button>
           </div>
 
-          {/* Sign In */}
           <button type="submit" className={styles.submitBtn}>
             Sign In
           </button>
 
-          {/* Register */}
           <p className={styles.registerRow}>
             Don&apos;t have an account?{" "}
             <button
