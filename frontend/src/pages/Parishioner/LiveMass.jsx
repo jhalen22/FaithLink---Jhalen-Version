@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/LiveMass.css";
+import "../../styles/Parishioner/LiveMass.css";
 
 function LiveMass() {
   const navigate = useNavigate();

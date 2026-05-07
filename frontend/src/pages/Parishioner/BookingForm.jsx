@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import "../styles/Bookings.css";
+import "../../styles/Parishioner/Bookings.css";
 
 function BookingForm() {
   const navigate = useNavigate();

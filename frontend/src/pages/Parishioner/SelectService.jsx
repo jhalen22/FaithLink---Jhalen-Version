@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "../styles/Bookings.css";
+import "../../styles/Parishioner/Bookings.css";
 
 function SelectService() {
   const navigate = useNavigate();

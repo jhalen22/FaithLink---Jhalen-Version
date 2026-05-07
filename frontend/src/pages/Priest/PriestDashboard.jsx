@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "../styles/PriestDashboard.css";
+import "../../styles/Priest/PriestDashboard.css";
 
 function PriestDashboard() {
   const navigate = useNavigate();
