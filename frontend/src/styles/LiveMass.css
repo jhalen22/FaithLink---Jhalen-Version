@@ -1,0 +1,106 @@
+.live-page {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: #eef4fb;
+  padding-bottom: 90px;
+  overflow-x: hidden;
+}
+
+.live-header {
+  background: #244f99;
+  color: white;
+  height: 70px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.live-header h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.live-back {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+  font-size: 18px;
+}
+
+.live-content {
+  padding: 16px;
+}
+
+.live-card,
+.schedule-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.live-video {
+  height: 210px;
+  background: black;
+  position: relative;
+}
+
+.live-video iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.live-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #ff3b5f;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.live-info {
+  padding: 18px;
+  text-align: center;
+}
+
+.live-info h2 {
+  margin: 0;
+  color: #244f99;
+  font-size: 20px;
+}
+
+.live-info p {
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.schedule-card {
+  padding: 20px;
+  text-align: center;
+}
+
+.schedule-card h3 {
+  margin: 0 0 12px;
+  color: #244f99;
+  font-size: 20px;
+}
+
+.schedule-card p {
+  margin: 8px 0;
+  color: #64748b;
+  font-size: 14px;
+}

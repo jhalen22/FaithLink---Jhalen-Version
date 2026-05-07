@@ -1,0 +1,255 @@
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.booking-form input,
+.booking-form select,
+.booking-form textarea {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.booking-form button {
+  background: #244f99;
+  color: white;
+}
+
+.booking-item {
+  border-left: 4px solid #244f99;
+  background: #f7f9ff;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+}
+
+.status {
+  display: inline-block;
+  background: #ffe08a;
+  color: #5c4400;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.booking-tabs {
+  background: white;
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  overflow-x: auto;
+}
+
+.booking-tabs button {
+  background: #eef3fb;
+  color: #244f99;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 13px;
+  box-shadow: none;
+}
+
+.booking-tabs button:hover {
+  background: #244f99;
+  color: white;
+}
+
+.booking-list-area {
+  min-height: 570px;
+  background: #eef4fb;
+  padding: 14px;
+  padding-bottom: 90px;
+}
+
+.empty-bookings {
+  text-align: center;
+  margin-top: 120px;
+  color: #5f6f85;
+}
+
+.empty-icon {
+  font-size: 52px;
+  margin-bottom: 10px;
+}
+
+.booking-card {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+  border-left: 5px solid #244f99;
+  text-align: left;
+}
+
+.booking-card h3 {
+  margin: 0 0 10px;
+  color: #244f99;
+  font-size: 18px;
+}
+
+.booking-card p {
+  margin: 6px 0;
+  color: #4f5f76;
+  font-size: 14px;
+}
+
+.booking-card strong {
+  color: #2f3b52;
+}
+
+.floating-add {
+  position: fixed;
+  bottom: 85px;
+  right: calc(50% - 190px);
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  font-size: 32px;
+  background: #244f99;
+  color: white;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.service-page {
+  padding: 18px;
+  background: #eef4fb;
+  min-height: 650px;
+}
+
+.service-page h2 {
+  color: #244f99;
+  margin-bottom: 8px;
+}
+
+.service-description {
+  color: #5f6f85;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.service-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.service-card {
+  background: white;
+  border-radius: 16px;
+  padding: 22px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.service-card:hover {
+  transform: translateY(-3px);
+}
+
+.service-icon {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4a7df0, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  font-size: 28px;
+  color: white;
+  margin-bottom: 14px;
+}
+
+.service-card h3 {
+  font-size: 16px;
+  color: #244f99;
+  margin-bottom: 4px;
+}
+
+.service-card p {
+  font-size: 13px;
+  color: #7b8ba3;
+}
+
+.back-btn {
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+}
+
+.booking-form-page {
+  background: #eef4fb;
+  min-height: 100vh;
+  padding: 18px;
+}
+
+.booking-form-page h2 {
+  color: #244f99;
+  margin-bottom: 20px;
+}
+
+.full-booking-form {
+  background: white;
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.full-booking-form label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #244f99;
+}
+
+.full-booking-form input,
+.full-booking-form textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #d9e3f0;
+  font-size: 14px;
+}
+
+.full-booking-form textarea {
+  min-height: 90px;
+  resize: none;
+}
+
+.two-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.cancel-btn {
+  flex: 1;
+  background: #e7edf6;
+  color: #244f99;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.submit-btn {
+  flex: 2;
+  background: #244f99;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+}
