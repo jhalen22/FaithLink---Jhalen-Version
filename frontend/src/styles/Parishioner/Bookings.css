@@ -1,255 +1,298 @@
-.booking-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.booking-form input,
-.booking-form select,
-.booking-form textarea {
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-}
-
-.booking-form button {
-  background: #244f99;
-  color: white;
-}
-
-.booking-item {
-  border-left: 4px solid #244f99;
-  background: #f7f9ff;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-}
-
+/* ── Status badges ───────────────────────────────── */
 .status {
   display: inline-block;
-  background: #ffe08a;
-  color: #5c4400;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
   font-weight: 700;
+  letter-spacing: 0.3px;
   text-transform: capitalize;
 }
 
+.status[class*="pending"],
+.booking-card .status:not([style]) {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+/* ── Filter tabs ─────────────────────────────────── */
 .booking-tabs {
-  background: white;
+  background: var(--card);
   display: flex;
   gap: 8px;
-  padding: 12px;
+  padding: 10px 14px;
   overflow-x: auto;
+  border-bottom: 1px solid var(--border);
+  scrollbar-width: none;
 }
+
+.booking-tabs::-webkit-scrollbar { display: none; }
 
 .booking-tabs button {
-  background: #eef3fb;
-  color: #244f99;
+  background: var(--primary-light);
+  color: var(--primary-dark);
   border-radius: 20px;
-  padding: 8px 16px;
+  padding: 7px 16px;
   font-size: 13px;
-  box-shadow: none;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
 }
 
-.booking-tabs button:hover {
-  background: #244f99;
+.booking-tabs button:hover,
+.booking-tabs button.active {
+  background: var(--primary);
   color: white;
 }
 
+/* ── Booking list area ───────────────────────────── */
 .booking-list-area {
-  min-height: 570px;
-  background: #eef4fb;
+  min-height: 70vh;
+  background: var(--bg);
   padding: 14px;
-  padding-bottom: 90px;
+  padding-bottom: calc(var(--nav-h) + 70px);
 }
 
-.empty-bookings {
-  text-align: center;
-  margin-top: 120px;
-  color: #5f6f85;
-}
-
-.empty-icon {
-  font-size: 52px;
-  margin-bottom: 10px;
-}
-
+/* ── Booking card ────────────────────────────────── */
 .booking-card {
-  background: #ffffff;
+  background: var(--card);
   padding: 16px;
-  border-radius: 16px;
-  margin-bottom: 14px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
-  border-left: 5px solid #244f99;
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+  border-left: 4px solid var(--primary);
   text-align: left;
+  transition: box-shadow 0.15s;
 }
+
+.booking-card:hover { box-shadow: var(--shadow-md); }
 
 .booking-card h3 {
   margin: 0 0 10px;
-  color: #244f99;
-  font-size: 18px;
+  color: var(--primary-dark);
+  font-size: 16px;
+  font-weight: 700;
 }
 
 .booking-card p {
-  margin: 6px 0;
-  color: #4f5f76;
-  font-size: 14px;
+  margin: 5px 0;
+  color: var(--muted);
+  font-size: 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
 }
 
-.booking-card strong {
-  color: #2f3b52;
+.booking-card strong { color: var(--text); }
+
+.booking-details {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
 }
 
+/* ── FAB ─────────────────────────────────────────── */
 .floating-add {
   position: fixed;
-  bottom: 85px;
-  right: calc(50% - 190px);
-  width: 58px;
-  height: 58px;
+  bottom: calc(var(--nav-h) + 14px);
+  right: calc(50% - 200px);
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
-  font-size: 32px;
-  background: #244f99;
+  font-size: 26px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: white;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 16px rgba(91, 141, 239, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s;
 }
 
+.floating-add:hover { transform: scale(1.08); }
+
+/* ── Select Service page ─────────────────────────── */
 .service-page {
   padding: 18px;
-  background: #eef4fb;
-  min-height: 650px;
+  background: var(--bg);
+  min-height: 100vh;
+  padding-bottom: calc(var(--nav-h) + 20px);
 }
 
 .service-page h2 {
-  color: #244f99;
-  margin-bottom: 8px;
+  color: var(--primary-dark);
+  margin-bottom: 6px;
+  font-size: 20px;
 }
 
 .service-description {
-  color: #5f6f85;
-  font-size: 14px;
+  color: var(--muted);
+  font-size: 13px;
   margin-bottom: 20px;
+  line-height: 1.5;
 }
 
 .service-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 12px;
 }
 
 .service-card {
-  background: white;
-  border-radius: 16px;
+  background: var(--card);
+  border-radius: var(--radius-md);
   padding: 22px 12px;
   text-align: center;
   cursor: pointer;
-  transition: 0.2s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: var(--shadow-sm);
 }
 
 .service-card:hover {
   transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
 }
 
 .service-icon {
-  width: 62px;
-  height: 62px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #4a7df0, #8b5cf6);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: auto;
-  font-size: 28px;
+  margin: 0 auto 12px;
   color: white;
-  margin-bottom: 14px;
 }
 
 .service-card h3 {
-  font-size: 16px;
-  color: #244f99;
-  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
 }
 
 .service-card p {
-  font-size: 13px;
-  color: #7b8ba3;
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
 }
 
-.back-btn {
-  background: rgba(255,255,255,0.2);
-  color: white;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  font-size: 18px;
-}
-
+/* ── Booking form page ───────────────────────────── */
 .booking-form-page {
-  background: #eef4fb;
+  background: var(--bg);
   min-height: 100vh;
-  padding: 18px;
+  padding: 18px 16px;
+  padding-bottom: 40px;
 }
 
-.booking-form-page h2 {
-  color: #244f99;
-  margin-bottom: 20px;
+/* Page title (e.g. "Baptism Booking") stays centered */
+.booking-form-page > h2 {
+  color: var(--primary-dark);
+  font-size: 20px;
+  margin-bottom: 18px;
+  text-align: center;
 }
 
+/* Form card — explicitly anchor all children to the left */
 .full-booking-form {
-  background: white;
-  border-radius: 18px;
+  background: var(--card);
+  border-radius: var(--radius-md);
   padding: 18px;
   display: flex;
   flex-direction: column;
   gap: 14px;
+  box-shadow: var(--shadow-sm);
+  text-align: left;
 }
 
+/* All labels inside any sacrament form */
 .full-booking-form label {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  color: #244f99;
+  color: var(--primary-dark);
+  display: block;
+  margin-bottom: 4px;
+  text-align: left;
 }
 
 .full-booking-form input,
-.full-booking-form textarea {
+.full-booking-form textarea,
+.full-booking-form select {
   width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #d9e3f0;
+  padding: 11px 13px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
   font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  text-align: left;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+.full-booking-form input:focus,
+.full-booking-form textarea:focus,
+.full-booking-form select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.1);
+  background: white;
 }
 
 .full-booking-form textarea {
-  min-height: 90px;
+  min-height: 88px;
   resize: none;
 }
 
+/* Two-column field rows — child wrappers must also be left-anchored */
 .two-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
+.two-grid > div {
+  text-align: left;
+}
+
 .form-buttons {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .cancel-btn {
   flex: 1;
-  background: #e7edf6;
-  color: #244f99;
+  background: var(--primary-light);
+  color: var(--primary-dark);
   padding: 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
 }
+
+.cancel-btn:hover { background: #dce7fc; }
 
 .submit-btn {
   flex: 2;
-  background: #244f99;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: white;
   padding: 12px;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(91, 141, 239, 0.3);
+  transition: opacity 0.2s;
 }
+
+.submit-btn:hover { opacity: 0.9; }

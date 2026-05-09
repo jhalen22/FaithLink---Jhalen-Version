@@ -1,77 +1,258 @@
-.wrapper {
+/* ── Modal overlay ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  z-index: 200;
+}
+
+/* ── Slide-in side panel ── */
+.panel {
+  width: 420px;
+  max-width: 100vw;
+  height: 100vh;
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  background-color: #f1f4f8;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
+  animation: slideIn 0.22s ease-out;
 }
 
-.navbar {
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+/* ── Panel header ── */
+.panelHeader {
   display: flex;
-  align-items: center;
-  background-color: #1a2e4a;
-  padding: 0 24px;
-  height: 60px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #e2e8f0;
+  gap: 12px;
+  flex-shrink: 0;
 }
 
-.navLeft {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.panelTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 6px 0;
 }
 
-.backBtn {
+.closeBtn {
   background: none;
   border: none;
   cursor: pointer;
-  color: #cbd5e1;
-  font-size: 1.4rem;
-  padding: 4px 10px;
-  border-radius: 6px;
-  transition: background-color 0.2s, color 0.2s;
+  font-size: 1.1rem;
+  color: #94a3b8;
+  padding: 2px 6px;
+  border-radius: 4px;
   line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.15s;
 }
 
-.backBtn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-}
-
-.logo {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.5px;
-}
-
-.main {
-  flex: 1;
-  padding: 36px 40px;
-  max-width: 900px;
-  width: 100%;
-  margin: 0 auto;
-  box-sizing: border-box;
-}
-
-.pageTitle {
-  font-size: 1.5rem;
-  font-weight: 700;
+.closeBtn:hover {
   color: #1e293b;
-  margin: 0 0 20px 0;
 }
 
-.placeholder {
+/* ── Scrollable body ── */
+.panelBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+
+/* ── Section ── */
+.section {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.sectionTitle {
+  font-size: 0.72rem;
+  font-weight: 700;
   color: #64748b;
-  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin: 0 0 10px 0;
 }
 
+/* ── Key/value detail rows ── */
+.detailRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 5px 0;
+}
+
+.detailLabel {
+  flex: 0 0 140px;
+  font-size: 0.8rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.detailValue {
+  flex: 1;
+  font-size: 0.875rem;
+  color: #1e293b;
+  word-break: break-word;
+}
+
+/* ── Notes / free text ── */
+.noteText {
+  font-size: 0.875rem;
+  color: #334155;
+  line-height: 1.6;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* ── Document list ── */
+.docList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.docLink {
+  font-size: 0.85rem;
+  color: #3b82f6;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.docLink:hover {
+  text-decoration: underline;
+}
+
+/* ── Approve / Reject action row ── */
+.actions {
+  display: flex;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.approveBtn {
+  flex: 1;
+  padding: 10px;
+  background-color: #16a34a;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.2s;
+}
+
+.approveBtn:hover:not(:disabled) {
+  background-color: #15803d;
+}
+
+.approveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.rejectBtn {
+  flex: 1;
+  padding: 10px;
+  background-color: #ffffff;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.rejectBtn:hover:not(:disabled) {
+  background-color: #fef2f2;
+  border-color: #dc2626;
+}
+
+.rejectBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Loading / error states in table ── */
+.stateMsg {
+  padding: 24px;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.errorMsg {
+  padding: 24px;
+  color: #dc2626;
+  font-size: 0.875rem;
+}
+
+/* ── Service filter pill row ── */
+.filterRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filterBtn {
+  padding: 6px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background-color: #ffffff;
+  color: #475569;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.filterBtn:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.filterBtnActive {
+  background-color: #1a2e4a;
+  border-color: #1a2e4a;
+  color: #ffffff;
+}
+
+.filterBtnActive:hover {
+  background-color: #1e3a5f;
+  border-color: #1e3a5f;
+}
+
+/* ── Mobile ── */
 @media (max-width: 600px) {
-  .main {
-    padding: 24px 16px;
+  .panel {
+    width: 100vw;
   }
 
-  .navbar {
-    padding: 0 16px;
+  .detailLabel {
+    flex: 0 0 110px;
   }
 }

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { QRCodeSVG } from "qrcode.react";
+import { ArrowLeft } from "lucide-react";
 import "../../styles/Parishioner/Donation.css";
 
 function Donation() {
@@ -68,7 +70,7 @@ function Donation() {
     <div className="donation-screen">
       <div className="donation-header">
         <button className="back-btn" onClick={() => navigate("/dashboard")}>
-          ←
+          <ArrowLeft size={18} strokeWidth={2.5} />
         </button>
 
         <div className="donation-heart">♡</div>
@@ -192,8 +194,14 @@ function Donation() {
           <div className="payment-info">
             <h4>Payment Information</h4>
 
-            <div className="qr-display">▦</div>
-            <p className="scan-text">Scan QR code to pay</p>
+            <div className="qr-display">
+              <QRCodeSVG
+                value={`${method} Payment\nFaithLink Parish\nNumber: ${method === "GCash" ? "09123456789" : "09187654321"}\nAmount: PHP ${form.amount || "0"}\nPurpose: ${finalPurpose || "Donation"}`}
+                size={140}
+                style={{ display: "block" }}
+              />
+            </div>
+            <p className="scan-text">Scan to donate via {method}</p>
 
             <div className="wallet-row">
               <div>

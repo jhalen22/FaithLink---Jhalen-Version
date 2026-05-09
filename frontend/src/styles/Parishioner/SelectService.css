@@ -1,0 +1,120 @@
+/* ── Select Service — refined UI pass ────────────────────
+   Overrides the generic .service-* rules in Bookings.css.
+   Import this file AFTER Bookings.css in SelectService.jsx.
+   ─────────────────────────────────────────────────────── */
+
+/* Page wrapper */
+.service-page {
+  padding: 20px 16px;
+  background: var(--bg);
+  min-height: 100vh;
+  padding-bottom: calc(var(--nav-h) + 24px);
+}
+
+.service-page > h2 {
+  color: var(--primary-dark);
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  letter-spacing: -0.3px;
+}
+
+.service-description {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0 0 22px;
+  line-height: 1.55;
+}
+
+/* Grid — 2-column layout preserved */
+.service-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+}
+
+/* ── Card base ──────────────────────────────────────── */
+.service-card {
+  background: var(--card);
+  border-radius: var(--radius-md);
+  padding: 18px 14px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  min-height: 152px;
+  text-align: left;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+/* Gold-to-blue accent bar across the top of every card */
+.service-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--primary) 100%);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+/* Hover — lift + soft glow ring */
+.service-card:hover {
+  transform: translateY(-3px) scale(1.016);
+  box-shadow: var(--shadow-md), 0 0 0 3px rgba(91, 141, 239, 0.10);
+  border-color: var(--primary-light);
+}
+
+/* Tap / active feedback */
+.service-card:active {
+  transform: scale(0.97);
+  box-shadow: var(--shadow-sm);
+  transition-duration: 0.08s;
+}
+
+/* ── Icon circle — centered inside the card ─────────── */
+.service-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(140deg, #8BBCF8 0%, var(--primary) 55%, var(--primary-dark) 100%);
+  /* soft gold halo + blue glow */
+  box-shadow:
+    0 0 0 4px var(--primary-light),
+    0 0 0 6px var(--gold-light),
+    0 4px 12px rgba(91, 141, 239, 0.20);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+/* ── Text block — left-aligned below the icon ───────── */
+.service-card-text {
+  width: 100%;
+  text-align: left;
+}
+
+.service-card-text h3 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin: 0 0 3px;
+  line-height: 1.25;
+  letter-spacing: -0.1px;
+}
+
+.service-card-text p {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.4;
+}

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 function Settings() {
   const navigate = useNavigate();
@@ -7,7 +8,9 @@ function Settings() {
     <div className="mobile-dashboard">
       <div className="top-bar">
         <div className="brand">
-          <button className="back-btn" onClick={() => navigate("/profile")}>←</button>
+          <button className="back-btn" onClick={() => navigate("/profile")}>
+            <ArrowLeft size={18} strokeWidth={2.5} />
+          </button>
           <h2>Settings</h2>
         </div>
       </div>

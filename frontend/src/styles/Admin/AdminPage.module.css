@@ -327,6 +327,90 @@
   border-color: #3b82f6;
 }
 
+/* ── Form elements (used in stream add/edit form) ── */
+.formRow {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.formLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.formInput {
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #1e293b;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.formInput:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.formActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Primary call-to-action button (dark navy, matches admin navbar) */
+.primaryBtn {
+  padding: 8px 16px;
+  background-color: #1a2e4a;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.primaryBtn:hover {
+  background-color: #1e3a5f;
+}
+
+.primaryBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Danger (destructive) button */
+.dangerBtn {
+  padding: 5px 12px;
+  background: none;
+  border: 1px solid #fca5a5;
+  color: #dc2626;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.dangerBtn:hover {
+  background-color: #fef2f2;
+  border-color: #dc2626;
+}
+
 /* ── Stream grid ── */
 .streamGrid {
   display: grid;

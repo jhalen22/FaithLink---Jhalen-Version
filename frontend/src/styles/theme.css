@@ -1,0 +1,477 @@
+/* ═══════════════════════════════════════════════════════
+   FaithLink Design System — v2
+   Soft church-inspired modern mobile palette
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Design Tokens ─────────────────────────────────── */
+:root {
+  --primary:       #5B8DEF;
+  --primary-dark:  #2F5FBF;
+  --primary-light: #EBF1FD;
+  --gold:          #D4A95A;
+  --gold-light:    #FBF3E3;
+
+  --bg:       #F6F8FC;
+  --card:     #FFFFFF;
+  --text:     #1E2A3A;
+  --muted:    #6B7280;
+  --border:   #E8EDF5;
+
+  --shadow-sm: 0 1px 6px rgba(91, 141, 239, 0.08);
+  --shadow-md: 0 4px 16px rgba(91, 141, 239, 0.12);
+  --shadow-lg: 0 8px 28px rgba(91, 141, 239, 0.18);
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+
+  --nav-h: 68px;
+}
+
+/* ── Global Reset ────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  /* Suppress blinking text caret on all non-editable elements globally.
+     Real inputs restore it below. */
+  caret-color: transparent;
+}
+
+button { border: none; cursor: pointer; font-family: inherit; }
+input, textarea, select { font-family: inherit; }
+input:focus, textarea:focus, select:focus { outline: none; }
+a { text-decoration: none; }
+
+/* ── Caret & selection — non-editable UI chrome ──────── */
+
+/* Inputs/textareas get the caret back; everything else stays silent */
+input, textarea, [contenteditable="true"] {
+  caret-color: auto;
+}
+
+/* UI chrome that should never behave like editable text:
+   - top bars, headings, nav tabs, cards, icons, buttons
+   Prevents the I-beam cursor on hover AND locks out accidental
+   text selection that can trigger a blink on focus. */
+.top-bar,
+.brand,
+.brand h2,
+.bottom-nav-bar,
+.nav-tab,
+.nav-tab span,
+button,
+h1, h2, h3, h4, h5, h6,
+.section-heading,
+.service-card-text,
+.live-header-title,
+.priest-welcome h2,
+.priest-welcome p {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ── Mobile Shell ────────────────────────────────────── */
+.mobile-dashboard {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--bg);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── Top Bar ─────────────────────────────────────────── */
+.top-bar {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 2px 12px rgba(47, 95, 191, 0.25);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.logo-box {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.back-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.20);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, transform 0.12s, box-shadow 0.15s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.32);
+  transform: scale(1.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+}
+
+.back-btn:active { transform: scale(0.94); }
+
+/* Prevent SVG from inheriting inline dimensions that create gaps */
+.back-btn svg { display: block; flex-shrink: 0; }
+
+/* .top-icons / .top-actions — interchangeable; both produce the same flex row */
+.top-icons,
+.top-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Standard icon button used in every top bar */
+.top-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s, transform 0.12s;
+  flex-shrink: 0;
+}
+
+.top-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.28);
+  transform: scale(1.06);
+}
+
+/* Prevent inline gap artefacts from the SVG element */
+.top-icon-btn svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* ── Page Sections ───────────────────────────────────── */
+.page-body {
+  padding: 16px 16px calc(var(--nav-h) + 16px);
+}
+
+.section-heading {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 12px;
+}
+
+/* ── Cards ───────────────────────────────────────────── */
+.content-card {
+  background: var(--card);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  margin: 14px 14px 0;
+  box-shadow: var(--shadow-md);
+}
+
+.church-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.church-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.church-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 2px;
+}
+
+.church-header p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── Empty State ─────────────────────────────────────── */
+.empty-bookings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 56px 24px calc(var(--nav-h) + 24px);
+  color: var(--muted);
+  gap: 10px;
+}
+
+.empty-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.empty-bookings h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+.empty-bookings p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+  max-width: 260px;
+  line-height: 1.5;
+}
+
+/* ── Quick Actions Grid ──────────────────────────────── */
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--card);
+  padding: 14px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 8px 4px;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s;
+}
+
+.action-item:hover { background: var(--primary-light); }
+
+.action-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.action-item p {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+  text-align: center;
+}
+
+/* ── Priest Schedule Cards ───────────────────────────── */
+.priest-schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: calc(var(--nav-h) + 8px);
+}
+
+.priest-schedule-card {
+  background: var(--card);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.priest-schedule-card h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.priest-schedule-card p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.4;
+}
+
+.priest-schedule-card button {
+  margin-top: 12px;
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  box-shadow: 0 2px 8px rgba(91, 141, 239, 0.25);
+}
+
+.priest-schedule-card button:hover { opacity: 0.9; }
+.priest-schedule-card button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* ── Status Badges ───────────────────────────────────── */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  margin-top: 10px;
+}
+
+.status-badge-confirmed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-badge-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.priest-welcome {
+  background: var(--card);
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.priest-welcome h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 2px;
+}
+
+.priest-welcome p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ── Buttons ─────────────────────────────────────────── */
+.submit-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  padding: 13px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 3px 10px rgba(91, 141, 239, 0.3);
+  transition: opacity 0.2s;
+}
+
+.submit-btn:hover { opacity: 0.9; }
+
+/* ── Bottom Navigation ───────────────────────────────── */
+.bottom-nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: var(--nav-h);
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  z-index: 100;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.nav-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  transition: color 0.15s;
+}
+
+.nav-tab span {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.nav-tab-active { color: var(--primary); }

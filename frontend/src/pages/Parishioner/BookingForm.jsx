@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { ArrowLeft, Search, Bell } from "lucide-react";
 import "../../styles/Parishioner/Bookings.css";
 
 function BookingForm() {
@@ -24,22 +25,27 @@ function BookingForm() {
     groomName: "",
     brideName: "",
     requesterName: "",
+    deceasedName: "",
     patientName: "",
     patientAge: "",
     urgencyLevel: "",
     intentionFor: "",
     intentionType: "",
+    customIntentionType: "",
     preferredDate: "",
     preferredTime: "",
     address: "",
     message: "",
   });
 
+  const [documents, setDocuments] = useState([]);
+
   const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e) => {
+    setDocuments(Array.from(e.target.files));
   };
 
   const getFormTitle = () => {
@@ -47,78 +53,62 @@ function BookingForm() {
     return `${sacramentType} Booking`;
   };
 
-  const buildMessage = () => {
-  const lines = [];
-
-  const addLine = (label, value) => {
-    if (value && value.trim() !== "") {
-      lines.push(`${label}: ${value}`);
+  // Returns a clean object with only the fields relevant to this sacrament.
+  // This replaces the old buildMessage() approach that packed everything into one string.
+  const buildSacramentSpecificData = () => {
+    switch (sacramentType) {
+      case "Baptism":
+        return {
+          parentGuardianName: form.fullName,
+          childName: form.childName,
+          birthDate: form.birthDate,
+          parentsName: form.parentsName,
+          godparentsName: form.godparentsName,
+        };
+      case "First Communion":
+        return {
+          parentGuardianName: form.fullName,
+          childName: form.childName,
+          ageGrade: form.ageGrade,
+          baptismParish: form.baptismParish,
+        };
+      case "Confirmation":
+        return {
+          candidateName: form.candidateName,
+          age: form.ageGrade,
+          baptismParish: form.baptismParish,
+          sponsorName: form.sponsorName,
+        };
+      case "Wedding":
+        return {
+          groomName: form.groomName,
+          brideName: form.brideName,
+        };
+      case "Anointing of the Sick":
+        return {
+          requesterName: form.requesterName,
+          patientName: form.patientName,
+          patientAge: form.patientAge,
+          urgencyLevel: form.urgencyLevel,
+        };
+      case "Funeral Blessing":
+        return {
+          requesterName: form.requesterName,
+          deceasedName: form.deceasedName,
+        };
+      case "Mass Intentions":
+        return {
+          requesterName: form.requesterName,
+          intentionFor: form.intentionFor,
+          intentionType:
+            form.intentionType === "Other"
+              ? form.customIntentionType
+              : form.intentionType,
+        };
+      default:
+        return {};
     }
   };
-
-  addLine("Service Type", sacramentType);
-
-  if (sacramentType === "Baptism") {
-    addLine("Parent/Guardian Name", form.fullName);
-    addLine("Email", form.email);
-    addLine("Phone", form.phone);
-    addLine("Child's Name", form.childName);
-    addLine("Birth Date", form.birthDate);
-    addLine("Parents' Names", form.parentsName);
-    addLine("Godparents' Names", form.godparentsName);
-  }
-
-  if (sacramentType === "First Communion") {
-    addLine("Parent/Guardian Name", form.fullName);
-    addLine("Email", form.email);
-    addLine("Phone", form.phone);
-    addLine("Child's Name", form.childName);
-    addLine("Age/Grade Level", form.ageGrade);
-    addLine("Baptism Parish", form.baptismParish);
-  }
-
-  if (sacramentType === "Confirmation") {
-    addLine("Candidate Name", form.candidateName);
-    addLine("Email", form.email);
-    addLine("Phone", form.phone);
-    addLine("Age", form.ageGrade);
-    addLine("Baptism Parish", form.baptismParish);
-    addLine("Sponsor Name", form.sponsorName);
-  }
-
-  if (sacramentType === "Wedding") {
-    addLine("Groom's Name", form.groomName);
-    addLine("Bride's Name", form.brideName);
-    addLine("Email", form.email);
-    addLine("Phone", form.phone);
-  }
-
-  if (sacramentType === "Anointing of the Sick") {
-    addLine("Requester's Name", form.requesterName);
-    addLine("Patient's Name", form.patientName);
-    addLine("Patient's Age", form.patientAge);
-    addLine("Phone", form.phone);
-    addLine("Urgency Level", form.urgencyLevel);
-  }
-
-  if (sacramentType === "Mass Intentions") {
-    addLine("Requester's Name", form.requesterName);
-    addLine("Email", form.email);
-    addLine("Phone", form.phone);
-    addLine("Intention For", form.intentionFor);
-    addLine(
-      "Intention Type",
-      form.intentionType === "Other"
-        ? form.customIntentionType
-        : form.intentionType
-    );
-  }
-
-  addLine("Address", form.address);
-  addLine("Notes", form.message);
-
-  return lines.join("\n");
-};
 
   const submitBooking = async (e) => {
     e.preventDefault();
@@ -126,20 +116,27 @@ function BookingForm() {
     try {
       const token = localStorage.getItem("token");
 
-      await axios.post(
-        "http://localhost:5000/api/bookings",
-        {
-          sacramentType,
-          preferredDate: form.preferredDate,
-          preferredTime: form.preferredTime,
-          message: buildMessage(),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      // Use FormData so document files can be sent alongside text fields.
+      // The backend uses multer which requires multipart/form-data.
+      const formData = new FormData();
+      formData.append("sacramentType", sacramentType);
+      formData.append("preferredDate", form.preferredDate);
+      formData.append("preferredTime", form.preferredTime);
+      formData.append("message", form.message);
+      formData.append("contactNumber", form.phone);
+      formData.append("address", form.address);
+      // Serialize the structured object as JSON; the backend will parse it.
+      formData.append(
+        "sacramentSpecificData",
+        JSON.stringify(buildSacramentSpecificData())
       );
+
+      documents.forEach((file) => formData.append("documents", file));
+
+      await axios.post("http://localhost:5000/api/bookings", formData, {
+        headers: { Authorization: `Bearer ${token}` },
+        // Do NOT set Content-Type manually — axios sets the multipart boundary automatically.
+      });
 
       alert("Booking submitted successfully!");
       navigate("/bookings");
@@ -156,13 +153,17 @@ function BookingForm() {
             className="back-btn"
             onClick={() => navigate("/select-service")}
           >
-            ←
+            <ArrowLeft size={18} strokeWidth={2.5} />
           </button>
         </div>
 
-        <div className="top-icons">
-            <span onClick={() => alert("Search feature coming soon")}>🔍</span>
-            <span onClick={() => alert("No new notifications")}>🔔</span>
+        <div className="top-actions">
+          <button className="top-icon-btn" onClick={() => alert("Search coming soon")}>
+            <Search size={18} strokeWidth={2} />
+          </button>
+          <button className="top-icon-btn" onClick={() => navigate("/notifications")}>
+            <Bell size={18} strokeWidth={2} />
+          </button>
         </div>
       </div>
 
@@ -170,6 +171,8 @@ function BookingForm() {
         <h2>{getFormTitle()}</h2>
 
         <form className="full-booking-form" onSubmit={submitBooking}>
+
+          {/* ── Baptism ── */}
           {sacramentType === "Baptism" && (
             <>
               <label>Parent / Guardian Full Name</label>
@@ -190,7 +193,6 @@ function BookingForm() {
                     onChange={handleChange}
                   />
                 </div>
-
                 <div>
                   <label>Phone</label>
                   <input
@@ -236,6 +238,7 @@ function BookingForm() {
             </>
           )}
 
+          {/* ── First Communion ── */}
           {sacramentType === "First Communion" && (
             <>
               <label>Parent / Guardian Full Name</label>
@@ -256,7 +259,6 @@ function BookingForm() {
                     onChange={handleChange}
                   />
                 </div>
-
                 <div>
                   <label>Phone</label>
                   <input
@@ -294,6 +296,7 @@ function BookingForm() {
             </>
           )}
 
+          {/* ── Confirmation ── */}
           {sacramentType === "Confirmation" && (
             <>
               <label>Candidate Name</label>
@@ -314,7 +317,6 @@ function BookingForm() {
                     onChange={handleChange}
                   />
                 </div>
-
                 <div>
                   <label>Phone</label>
                   <input
@@ -352,6 +354,7 @@ function BookingForm() {
             </>
           )}
 
+          {/* ── Wedding ── */}
           {sacramentType === "Wedding" && (
             <>
               <label>Groom's Name</label>
@@ -380,7 +383,6 @@ function BookingForm() {
                     onChange={handleChange}
                   />
                 </div>
-
                 <div>
                   <label>Phone</label>
                   <input
@@ -394,6 +396,7 @@ function BookingForm() {
             </>
           )}
 
+          {/* ── Anointing of the Sick ── */}
           {sacramentType === "Anointing of the Sick" && (
             <>
               <label>Requester's Name</label>
@@ -422,7 +425,6 @@ function BookingForm() {
                     onChange={handleChange}
                   />
                 </div>
-
                 <div>
                   <label>Phone</label>
                   <input
@@ -448,6 +450,36 @@ function BookingForm() {
             </>
           )}
 
+          {/* ── Funeral Blessing ── */}
+          {sacramentType === "Funeral Blessing" && (
+            <>
+              <label>Requester's Name</label>
+              <input
+                name="requesterName"
+                placeholder="Name of person making the request"
+                value={form.requesterName}
+                onChange={handleChange}
+              />
+
+              <label>Deceased's Name</label>
+              <input
+                name="deceasedName"
+                placeholder="Full name of the deceased"
+                value={form.deceasedName}
+                onChange={handleChange}
+              />
+
+              <label>Phone</label>
+              <input
+                name="phone"
+                placeholder="+63"
+                value={form.phone}
+                onChange={handleChange}
+              />
+            </>
+          )}
+
+          {/* ── Mass Intentions ── */}
           {sacramentType === "Mass Intentions" && (
             <>
               <label>Requester's Name</label>
@@ -468,7 +500,6 @@ function BookingForm() {
                     onChange={handleChange}
                   />
                 </div>
-
                 <div>
                   <label>Phone</label>
                   <input
@@ -489,34 +520,35 @@ function BookingForm() {
               />
 
               <label>Intention Type</label>
-                <select
+              <select
                 name="intentionType"
                 value={form.intentionType}
                 onChange={handleChange}
->               <option value="">Select intention type</option>
+              >
+                <option value="">Select intention type</option>
                 <option value="Thanksgiving">Thanksgiving</option>
                 <option value="Healing">Healing</option>
                 <option value="Birthday">Birthday</option>
                 <option value="Death Anniversary">Death Anniversary</option>
                 <option value="Special Intention">Special Intention</option>
                 <option value="Other">Other</option>
-                </select>
+              </select>
 
-{form.intentionType === "Other" && (
-  <>
-    <label>Specify Intention Type</label>
-
-    <input
-      name="customIntentionType"
-      placeholder="Enter custom intention type"
-      value={form.customIntentionType || ""}
-      onChange={handleChange}
-    />
-  </>
-)}
+              {form.intentionType === "Other" && (
+                <>
+                  <label>Specify Intention Type</label>
+                  <input
+                    name="customIntentionType"
+                    placeholder="Enter custom intention type"
+                    value={form.customIntentionType || ""}
+                    onChange={handleChange}
+                  />
+                </>
+              )}
             </>
           )}
 
+          {/* ── Common fields ── */}
           <div className="two-grid">
             <div>
               <label>Preferred Date</label>
@@ -527,7 +559,6 @@ function BookingForm() {
                 onChange={handleChange}
               />
             </div>
-
             <div>
               <label>Preferred Time</label>
               <input
@@ -554,6 +585,40 @@ function BookingForm() {
             value={form.message}
             onChange={handleChange}
           />
+
+          {/* ── Supporting documents — hidden for services that don't need uploads ── */}
+          {sacramentType !== "Anointing of the Sick" &&
+           sacramentType !== "Mass Intentions" && (
+            <>
+              <label>
+                {sacramentType === "Baptism"
+                  ? "Upload Birth Certificate"
+                  : sacramentType === "First Communion"
+                  ? "Upload Baptism Certificate"
+                  : "Supporting Documents (optional)"}
+              </label>
+
+              {(sacramentType === "Baptism" || sacramentType === "First Communion") && (
+                <p style={{ fontSize: "12px", color: "var(--muted)", margin: "-6px 0 2px", textAlign: "left" }}>
+                  {sacramentType === "Baptism"
+                    ? "Please upload a copy of the child's birth certificate."
+                    : "Please upload a copy of the baptism certificate."}
+                </p>
+              )}
+
+              <input
+                type="file"
+                multiple
+                accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                onChange={handleFileChange}
+              />
+              {documents.length > 0 && (
+                <p style={{ fontSize: "0.8rem", color: "var(--muted)", margin: "4px 0 0", textAlign: "left" }}>
+                  {documents.length} file{documents.length > 1 ? "s" : ""} selected
+                </p>
+              )}
+            </>
+          )}
 
           <div className="form-buttons">
             <button

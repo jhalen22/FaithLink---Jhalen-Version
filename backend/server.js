@@ -11,6 +11,8 @@ const donationRoutes = require("./routes/donationRoutes");
 const eventRoutes = require("./routes/eventRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
+const adminRoutes = require("./routes/adminRoutes");
+const streamRoutes = require("./routes/streamRoutes");
 
 require("dotenv").config();
 
@@ -25,7 +27,9 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/donations", donationRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/profile", profileRoutes);
-app.use("/api/notifications", notificationRoutes);  
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/streams", streamRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend is working!");
