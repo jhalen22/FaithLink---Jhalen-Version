@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ArrowLeft } from "lucide-react";
 
 function PersonalInformation() {
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ function PersonalInformation() {
       <div className="top-bar">
         <div className="brand">
           <button className="back-btn" onClick={() => navigate("/profile")}>
-            ←
+            <ArrowLeft size={18} strokeWidth={2.5} />
           </button>
           <h2>Personal Information</h2>
         </div>

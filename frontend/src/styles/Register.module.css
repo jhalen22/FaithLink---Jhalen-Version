@@ -1,28 +1,35 @@
+/* ── Register — mobile-app frame ─────────────────────────
+   Matches the same 430px shell used by all parishioner pages.
+   No justify-content: center here — the form is long enough
+   to scroll naturally within the mobile container.
+   ─────────────────────────────────────────────────────── */
+
+/* Outer wrapper — same dimensions as .mobile-dashboard */
 .pageWrapper {
-  position: fixed;
-  inset: 0;
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--bg);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background: #f0f2f5;
-  padding: 16px;
+  padding: 24px 16px;
   box-sizing: border-box;
-  overflow-y: auto;
 }
 
+/* Card sits inside the mobile frame, fills the inner width */
 .card {
   width: 100%;
-  max-width: 380px;
-  background: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  background: var(--card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
-  margin: auto;
 }
 
-/* ── Header ── */
+/* ── Header — same gradient as .top-bar ─────────────── */
 .header {
-  background:#326cd0;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   padding: 36px 24px 28px;
   display: flex;
   flex-direction: column;
@@ -33,7 +40,8 @@
 .iconCircle {
   width: 68px;
   height: 68px;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.20);
+  border: 2px solid rgba(255, 255, 255, 0.28);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -44,7 +52,7 @@
 .iconCircle svg {
   width: 36px;
   height: 36px;
-  color: #7c3aed;
+  color: #ffffff;
 }
 
 .headerTitle {
@@ -63,7 +71,7 @@
   line-height: 1.5;
 }
 
-/* ── Form body ── */
+/* ── Form body ───────────────────────────────────────── */
 .body {
   padding: 24px 20px 20px;
   display: flex;
@@ -71,7 +79,7 @@
   gap: 14px;
 }
 
-/* First name + Last name row */
+/* First name + Last name side by side */
 .nameRow {
   display: flex;
   gap: 10px;
@@ -82,7 +90,7 @@
   min-width: 0;
 }
 
-/* City + Province row */
+/* City + Province side by side */
 .addressRow {
   display: flex;
   gap: 10px;
@@ -101,42 +109,19 @@
   width: 100%;
 }
 
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  text-align: left;
+}
+
+/* ── Input wrappers ──────────────────────────────────── */
 .inputWrapper {
   position: relative;
   display: flex;
   align-items: center;
   width: 100%;
-}
-
-/* Plain input (no icon) */
-.input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 10px;
-  font-size: 14px;
-  color: #111827;
-  background: #f9fafb;
-  box-sizing: border-box;
-  outline: none;
-  transition: border-color 0.2s;
-  font-family: inherit;
-}
-
-.input::placeholder {
-  color: #9ca3af;
-}
-
-.input:focus {
-  border-color: #7c3aed;
-  background: #ffffff;
-}
-
-/* Input with leading icon */
-.inputWrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
 }
 
 .inputWrapper .leadIcon {
@@ -144,58 +129,81 @@
   left: 11px;
   width: 16px;
   height: 16px;
-  color: #9ca3af;
+  color: var(--muted);
   pointer-events: none;
   flex-shrink: 0;
 }
 
-.inputWithIcon {
+/* Plain input (no icon) */
+.input {
   width: 100%;
-  padding: 10px 12px 10px 36px;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 10px;
+  padding: 11px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
   font-size: 14px;
-  color: #111827;
-  background: #f9fafb;
+  color: var(--text);
+  background: var(--bg);
   box-sizing: border-box;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.15s, box-shadow 0.15s;
   font-family: inherit;
 }
 
-.inputWithIcon::placeholder {
-  color: #9ca3af;
+.input::placeholder { color: var(--muted); }
+
+.input:focus {
+  border-color: var(--primary);
+  background: var(--card);
+  box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.10);
 }
 
+/* Input with leading icon */
+.inputWithIcon {
+  width: 100%;
+  padding: 11px 13px 11px 36px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  font-family: inherit;
+}
+
+.inputWithIcon::placeholder { color: var(--muted); }
+
 .inputWithIcon:focus {
-  border-color: #7c3aed;
-  background: #ffffff;
+  border-color: var(--primary);
+  background: var(--card);
+  box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.10);
 }
 
 /* Password: icon left + eye right */
 .inputWithIconAndEye {
   width: 100%;
-  padding: 10px 40px 10px 36px;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 10px;
+  padding: 11px 40px 11px 36px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
   font-size: 14px;
-  color: #111827;
-  background: #f9fafb;
+  color: var(--text);
+  background: var(--bg);
   box-sizing: border-box;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.15s, box-shadow 0.15s;
   font-family: inherit;
 }
 
-.inputWithIconAndEye::placeholder {
-  color: #9ca3af;
-}
+.inputWithIconAndEye::placeholder { color: var(--muted); }
 
 .inputWithIconAndEye:focus {
-  border-color: #7c3aed;
-  background: #ffffff;
+  border-color: var(--primary);
+  background: var(--card);
+  box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.10);
 }
 
+/* Eye toggle button */
 .eyeBtn {
   position: absolute;
   right: 10px;
@@ -205,7 +213,7 @@
   padding: 0;
   display: flex;
   align-items: center;
-  color: #9ca3af;
+  color: var(--muted);
 }
 
 .eyeBtn svg {
@@ -213,13 +221,13 @@
   height: 18px;
 }
 
-/* Terms checkbox */
+/* ── Terms checkbox ──────────────────────────────────── */
 .termsLabel {
   display: flex;
   align-items: flex-start;
   gap: 8px;
   font-size: 13px;
-  color: #6b7280;
+  color: var(--muted);
   cursor: pointer;
   user-select: none;
   line-height: 1.5;
@@ -228,56 +236,51 @@
 .termsLabel input[type="checkbox"] {
   width: 15px;
   height: 15px;
-  accent-color: #326cd0;
+  accent-color: var(--primary);
   cursor: pointer;
   flex-shrink: 0;
   margin-top: 2px;
 }
 
-/* ── Submit button ── */
+/* ── Submit button — same gradient as app submit buttons */
 .submitBtn {
   width: 100%;
   padding: 13px;
   border: none;
-  border-radius: 10px;
-  background: #326cd0;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: #ffffff;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   letter-spacing: 0.3px;
+  box-shadow: 0 3px 10px rgba(91, 141, 239, 0.30);
   transition: opacity 0.2s;
   margin-top: 2px;
+  font-family: inherit;
 }
 
-.submitBtn:hover {
-  opacity: 0.9;
-}
+.submitBtn:hover { opacity: 0.9; }
+.submitBtn:active { opacity: 0.8; }
 
-.submitBtn:active {
-  opacity: 0.8;
-}
-
-/* ── Sign in link ── */
+/* ── Sign in link row ────────────────────────────────── */
 .signinRow {
   text-align: center;
   font-size: 13px;
-  color: #6b7280;
+  color: var(--muted);
   margin-top: 2px;
   padding-bottom: 4px;
 }
 
 .signinLink {
   font-weight: 600;
-  color: #326cd0;
+  color: var(--primary);
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
   font-size: 13px;
-  text-decoration: none;
+  font-family: inherit;
 }
 
-.signinLink:hover {
-  text-decoration: underline;
-}
+.signinLink:hover { text-decoration: underline; }

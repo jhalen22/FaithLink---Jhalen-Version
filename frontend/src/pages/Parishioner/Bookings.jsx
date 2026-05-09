@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Plus, Search, Bell, CalendarX } from "lucide-react";
+import BottomNav from "../../components/BottomNav";
 import "../../styles/Parishioner/Bookings.css";
 
 function Bookings() {
@@ -44,9 +46,13 @@ function Bookings() {
           <h2>My Bookings</h2>
         </div>
 
-        <div className="top-icons">
-          <span>🔍</span>
-          <span>🔔</span>
+        <div className="top-actions">
+          <button className="top-icon-btn" onClick={() => alert("Search coming soon")}>
+            <Search size={18} strokeWidth={2} />
+          </button>
+          <button className="top-icon-btn" onClick={() => navigate("/notifications")}>
+            <Bell size={18} strokeWidth={2} />
+          </button>
         </div>
       </div>
 
@@ -60,9 +66,11 @@ function Bookings() {
       <div className="booking-list-area">
         {filteredBookings.length === 0 ? (
           <div className="empty-bookings">
-            <div className="empty-icon">🗓️</div>
+            <div className="empty-icon">
+              <CalendarX size={34} strokeWidth={1.5} />
+            </div>
             <h3>No Bookings Found</h3>
-            <p>You don’t have any yet. Tap the + button to create a new booking.</p>
+            <p>You don&apos;t have any yet. Tap the + button to create a new booking.</p>
           </div>
         ) : (
           filteredBookings.map((booking) => (
@@ -70,7 +78,9 @@ function Bookings() {
               <h3>{booking.sacramentType}</h3>
               <p>
                 <strong>Date:</strong>{" "}
-                {new Date(booking.preferredDate).toLocaleDateString("en-US", {year: "numeric",month: "long",day: "numeric",})}
+                {new Date(booking.preferredDate).toLocaleDateString("en-PH", {
+                  year: "numeric", month: "long", day: "numeric",
+                })}
               </p>
               <p>
                 <strong>Time:</strong> {booking.preferredTime}
@@ -79,40 +89,54 @@ function Bookings() {
                 <strong>Status:</strong>{" "}
                 <span className="status">{booking.status}</span>
               </p>
-              <div className="booking-details"> {booking.message.split("\n").map((line, index) => {
-                if (!line.trim()) return null;
-                const parts = line.split(":");
-                if (parts.length < 2) {
-                return <p key={index}>{line}</p>;
-                }
-
-            return (
-                <p key={index}>
-                <strong>{parts[0]}:</strong>
-                {parts.slice(1).join(":")}
+              {/* Priest confirmation badge */}
+              {booking.priestConfirmationStatus === "confirmed" && (
+                <p style={{ color: "#16a34a", fontSize: "13px", fontWeight: 600 }}>
+                  ✓ Priest availability confirmed
                 </p>
-                );
-                })}
-            </div>
+              )}
+              {/* Sacrament-specific details (structured fields) */}
+              {booking.sacramentSpecificData &&
+                Object.keys(booking.sacramentSpecificData).length > 0 && (
+                  <div className="booking-details">
+                    {Object.entries(booking.sacramentSpecificData)
+                      .filter(([, val]) => val)
+                      .map(([key, val]) => (
+                        <p key={key}>
+                          <strong>
+                            {key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase())}:
+                          </strong>{" "}
+                          {val}
+                        </p>
+                      ))}
+                  </div>
+                )}
+              {/* Legacy message field (backward compat for older bookings) */}
+              {booking.message && (
+                <div className="booking-details">
+                  {booking.message.split("\n").map((line, index) => {
+                    if (!line.trim()) return null;
+                    const parts = line.split(":");
+                    if (parts.length < 2) return <p key={index}>{line}</p>;
+                    return (
+                      <p key={index}>
+                        <strong>{parts[0]}:</strong>
+                        {parts.slice(1).join(":")}
+                      </p>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           ))
         )}
       </div>
 
-      <button
-        className="floating-add"
-        onClick={() => navigate("/select-service")}
-      >
-        +
+      <button className="floating-add" onClick={() => navigate("/select-service")}>
+        <Plus size={26} strokeWidth={2.5} />
       </button>
 
-      <div className="bottom-nav">
-        <div onClick={() => navigate("/dashboard")}>🏠<p>Home</p></div>
-        <div onClick={() => navigate("/events")}>📅<p>Events</p></div>
-        <div onClick={() => navigate("/bookings")}>📝<p>Bookings</p></div>
-        <div onClick={() => navigate("/live-mass")}>📹<p>Live Mass</p></div>
-        <div onClick={() => navigate("/profile")}>👤<p>Profile</p></div>
-      </div>
+      <BottomNav />
     </div>
   );
 }

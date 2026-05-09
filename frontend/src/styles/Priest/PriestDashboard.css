@@ -1,52 +1,184 @@
-.priest-welcome {
-  background: white;
-  padding: 18px;
-  border-bottom: 1px solid #ddd;
+/* PriestDashboard.css
+   Priest-specific styles.
+   Core layout, priest-schedule-card, status-badge live in theme.css */
+
+/* ── Premium hero welcome section ───────────────────── */
+.priest-hero {
+  background: linear-gradient(150deg, var(--primary) 0%, var(--primary-dark) 100%);
+  padding: 26px 20px 34px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 24px 24px;
 }
 
-.priest-welcome h2 {
-  margin: 0;
-  color: #244f99;
-  font-size: 22px;
+/* Subtle cross watermark — matches Profile header aesthetic */
+.priest-hero::before {
+  content: "✝";
+  position: absolute;
+  right: 16px;
+  top: 6px;
+  font-size: 68px;
+  color: rgba(255, 255, 255, 0.06);
+  line-height: 1;
+  pointer-events: none;
 }
 
-.priest-welcome p {
-  margin: 6px 0 0;
-  color: #64748b;
-  font-size: 14px;
+/* Gold accent line at the bottom of the hero */
+.priest-hero::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.65;
 }
 
-.priest-schedule-list {
-  margin-top: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.priest-schedule-card {
-  background: #f7f9ff;
-  border-left: 5px solid #244f99;
-  border-radius: 14px;
-  padding: 14px;
-}
-
-.priest-schedule-card h4 {
-  margin: 0 0 8px;
-  color: #244f99;
-}
-
-.priest-schedule-card p {
-  margin: 5px 0;
-  font-size: 14px;
-  color: #4f5f76;
-}
-
-.priest-schedule-card button {
-  margin-top: 10px;
-  width: 100%;
-  background: #244f99;
+.priest-hero h2 {
+  font-size: 21px;
+  font-weight: 700;
   color: white;
-  padding: 10px;
-  border-radius: 10px;
-  font-weight: 600;
+  margin: 0 0 5px;
+  position: relative;
+  z-index: 1;
 }
+
+.priest-hero p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  line-height: 1.5;
+}
+
+/* ── Quick-actions card wrapper ──────────────────────── */
+/* Wraps the shared .quick-actions grid inside a rounded elevated card.
+   Gold top border adds a premium accent without overwhelming the blue palette. */
+.priest-actions-wrap {
+  margin: 14px 14px 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;        /* clips .quick-actions border-bottom to match radius */
+  box-shadow: var(--shadow-sm);
+  border-top: 2px solid var(--gold);
+}
+
+/* Remove the flat border-bottom that looks odd inside the card */
+.priest-actions-wrap .quick-actions {
+  border-bottom: none;
+}
+
+/* ── Dashboard booking card overrides ────────────────── */
+/* Gold left border replaces the plain primary-blue on the dashboard only */
+.priest-dashboard-card .priest-schedule-card {
+  border-left-color: var(--gold);
+}
+
+/* Sacrament title: slightly heavier for hierarchy */
+.priest-dashboard-card .priest-schedule-card h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 10px;
+  letter-spacing: 0.1px;
+}
+
+/* Subtle gold ring on the church-logo circle */
+.priest-dashboard-card .church-logo {
+  border: 1.5px solid rgba(212, 169, 90, 0.3);
+}
+
+/* ── Confirm Availability button — gold glow variant ─── */
+/* Inherits gradient/padding/radius from theme.css
+   priest-schedule-card button rule; we only add the gold accent layer. */
+.priest-dashboard-card .priest-schedule-card .priest-confirm-btn {
+  border: 1px solid rgba(212, 169, 90, 0.38);
+  box-shadow:
+    0 3px 10px rgba(91, 141, 239, 0.22),
+    0 0 0 1px rgba(212, 169, 90, 0.08);
+  transition: opacity 0.2s, box-shadow 0.2s;
+}
+
+.priest-dashboard-card .priest-schedule-card .priest-confirm-btn:hover:not(:disabled) {
+  box-shadow:
+    0 4px 16px rgba(91, 141, 239, 0.32),
+    0 0 0 1px rgba(212, 169, 90, 0.24);
+  opacity: 0.95;
+}
+
+/* ── Notification (alert) cards ─────────────────────── */
+.priest-alert-card {
+  background: var(--card);
+  border-left: 4px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.15s;
+}
+
+.priest-alert-card.unread {
+  background: var(--primary-light);
+  border-left-color: var(--primary);
+}
+
+.priest-alert-card:hover { box-shadow: var(--shadow-md); }
+
+.priest-alert-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+
+.priest-alert-body {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0 0 6px;
+  line-height: 1.5;
+}
+
+.priest-alert-date {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--muted);
+  margin: 0 0 10px;
+  opacity: 0.85;
+}
+
+.priest-mark-read-btn {
+  background: none;
+  border: 1.5px solid var(--primary);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.priest-mark-read-btn:hover { background: var(--primary-light); }
+
+/* ── Mark-all button in top bar ─────────────────────── */
+.priest-mark-all-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.priest-mark-all-btn:hover { background: rgba(255, 255, 255, 0.15); }
