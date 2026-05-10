@@ -475,3 +475,63 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .nav-tab-active { color: var(--primary); }
+
+html.faithlink-dark-mode,
+body.faithlink-dark-mode {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #f8fafc;
+  --muted: #cbd5e1;
+  --border: #334155;
+  --primary-light: #334155;
+
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+body.faithlink-dark-mode .mobile-dashboard {
+  background: var(--bg) !important;
+}
+
+body.faithlink-dark-mode .content-card,
+body.faithlink-dark-mode .profile-stats-card,
+body.faithlink-dark-mode .profile-row,
+body.faithlink-dark-mode .settings-card,
+body.faithlink-dark-mode .booking-card,
+body.faithlink-dark-mode .event-card,
+body.faithlink-dark-mode .notification-card,
+body.faithlink-dark-mode .donation-card,
+body.faithlink-dark-mode .service-card {
+  background: var(--card) !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+}
+
+body.faithlink-dark-mode h1,
+body.faithlink-dark-mode h2,
+body.faithlink-dark-mode h3,
+body.faithlink-dark-mode h4,
+body.faithlink-dark-mode p,
+body.faithlink-dark-mode span,
+body.faithlink-dark-mode label {
+  color: inherit;
+}
+
+body.faithlink-dark-mode .bottom-nav,
+body.faithlink-dark-mode .bottom-nav-bar {
+  background: #1e293b !important;
+  border-top-color: #334155 !important;
+}
+
+body.faithlink-dark-mode .bottom-nav div,
+body.faithlink-dark-mode .nav-tab {
+  color: #cbd5e1 !important;
+}
+
+body.faithlink-dark-mode input,
+body.faithlink-dark-mode textarea,
+body.faithlink-dark-mode select {
+  background: #0f172a !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}

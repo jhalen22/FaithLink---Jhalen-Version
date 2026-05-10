@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Plus, Search, Bell, CalendarX } from "lucide-react";
+import { Plus, Search, Bell, CalendarX, X } from "lucide-react";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/Parishioner/Bookings.css";
 
@@ -9,6 +9,8 @@ function Bookings() {
   const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
   const [filter, setFilter] = useState("all");
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchBookings = async () => {
     try {
@@ -35,10 +37,22 @@ function Bookings() {
     fetchBookings();
   }, []);
 
-  const filteredBookings =
-    filter === "all"
-      ? bookings
-      : bookings.filter((booking) => booking.status === filter);
+  const filteredBookings = bookings.filter((booking) => {
+    const matchesStatus = filter === "all" || booking.status === filter;
+
+    const searchableText = `
+      ${booking.sacramentType || ""}
+      ${booking.status || ""}
+      ${booking.preferredDate || ""}
+      ${booking.preferredTime || ""}
+      ${booking.message || ""}
+      ${JSON.stringify(booking.sacramentSpecificData || {})}
+    `.toLowerCase();
+
+    const matchesSearch = searchableText.includes(searchTerm.toLowerCase());
+
+    return matchesStatus && matchesSearch;
+  });
 
   return (
     <div className="mobile-dashboard">
@@ -49,14 +63,33 @@ function Bookings() {
         </div>
 
         <div className="top-actions">
-          <button className="top-icon-btn" onClick={() => alert("Search coming soon")}>
-            <Search size={18} strokeWidth={2} />
+          <button
+            className="top-icon-btn"
+            onClick={() => setShowSearch((prev) => !prev)}
+          >
+            {showSearch ? <X size={18} /> : <Search size={18} />}
           </button>
-          <button className="top-icon-btn" onClick={() => navigate("/notifications")}>
+
+          <button
+            className="top-icon-btn"
+            onClick={() => navigate("/notifications")}
+          >
             <Bell size={18} strokeWidth={2} />
           </button>
         </div>
       </div>
+
+      {showSearch && (
+        <div className="page-search-area">
+          <input
+            type="text"
+            placeholder="Search bookings by type, status, date, time..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            autoFocus
+          />
+        </div>
+      )}
 
       <div className="booking-tabs">
         <button onClick={() => setFilter("all")}>All</button>
@@ -72,7 +105,11 @@ function Bookings() {
               <CalendarX size={34} strokeWidth={1.5} />
             </div>
             <h3>No Bookings Found</h3>
-            <p>You don&apos;t have any yet. Tap the + button to create a new booking.</p>
+            <p>
+              {searchTerm
+                ? "No bookings match your search."
+                : "You don't have any yet. Tap the + button to create a new booking."}
+            </p>
           </div>
         ) : (
           filteredBookings.map((booking) => (
@@ -81,7 +118,9 @@ function Bookings() {
               <p>
                 <strong>Date:</strong>{" "}
                 {new Date(booking.preferredDate).toLocaleDateString("en-PH", {
-                  year: "numeric", month: "long", day: "numeric",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
                 })}
               </p>
               <p>
@@ -91,13 +130,13 @@ function Bookings() {
                 <strong>Status:</strong>{" "}
                 <span className="status">{booking.status}</span>
               </p>
-              {/* Priest confirmation badge */}
+
               {booking.priestConfirmationStatus === "confirmed" && (
                 <p style={{ color: "#16a34a", fontSize: "13px", fontWeight: 600 }}>
                   ✓ Priest availability confirmed
                 </p>
               )}
-              {/* Sacrament-specific details (structured fields) */}
+
               {booking.sacramentSpecificData &&
                 Object.keys(booking.sacramentSpecificData).length > 0 && (
                   <div className="booking-details">
@@ -106,14 +145,17 @@ function Bookings() {
                       .map(([key, val]) => (
                         <p key={key}>
                           <strong>
-                            {key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase())}:
+                            {key
+                              .replace(/([A-Z])/g, " $1")
+                              .replace(/^./, (s) => s.toUpperCase())}
+                            :
                           </strong>{" "}
                           {val}
                         </p>
                       ))}
                   </div>
                 )}
-              {/* Legacy message field (backward compat for older bookings) */}
+
               {booking.message && (
                 <div className="booking-details">
                   {booking.message.split("\n").map((line, index) => {

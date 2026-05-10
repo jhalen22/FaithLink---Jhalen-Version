@@ -1,14 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import {
-  ArrowLeft, Search, Bell, Droplets, BookOpen, Star, Heart, Activity
+  ArrowLeft, Bell, Droplets, BookOpen, Star, Heart, Activity
 } from "lucide-react";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/Parishioner/Bookings.css";
 import "../../styles/Parishioner/SelectService.css";
 
+// Mass Intentions is intentionally excluded — it is accessed from the
+// dashboard Intentions quick-action, not through Select a Service.
 const services = [
   { name: "Baptism",               subtitle: "Infant & Adult",   icon: Droplets },
-  { name: "First Communion",       subtitle: "Holy Eucharist",   icon: BookOpen },
+  { name: "Funeral Mass",          subtitle: "Funeral Service",  icon: BookOpen },
   { name: "Confirmation",          subtitle: "Holy Spirit",      icon: Star     },
   { name: "Wedding",               subtitle: "Holy Matrimony",   icon: Heart    },
   { name: "Anointing of the Sick", subtitle: "Healing Prayer",   icon: Activity },
@@ -29,11 +31,12 @@ function SelectService() {
             <ArrowLeft size={18} strokeWidth={2.5} />
           </button>
         </div>
+
         <div className="top-icons">
-          <button className="top-icon-btn" onClick={() => alert("Search feature coming soon")}>
-            <Search size={18} strokeWidth={2} />
-          </button>
-          <button className="top-icon-btn" onClick={() => navigate("/notifications")}>
+          <button
+            className="top-icon-btn"
+            onClick={() => navigate("/notifications")}
+          >
             <Bell size={18} strokeWidth={2} />
           </button>
         </div>
@@ -49,15 +52,21 @@ function SelectService() {
         <div className="service-grid">
           {services.map((service) => {
             const Icon = service.icon;
+
             return (
               <div
                 key={service.name}
                 className="service-card"
-                onClick={() => navigate("/booking-form", { state: { sacramentType: service.name } })}
+                onClick={() =>
+                  navigate("/booking-form", {
+                    state: { sacramentType: service.name },
+                  })
+                }
               >
                 <div className="service-icon">
                   <Icon size={26} strokeWidth={1.8} color="white" />
                 </div>
+
                 <div className="service-card-text">
                   <h3>{service.name}</h3>
                   <p>{service.subtitle}</p>

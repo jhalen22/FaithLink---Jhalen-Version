@@ -1,33 +1,32 @@
 const express = require("express");
 const Stream = require("../models/Stream");
+const User = require("../models/User");
 const { protect, adminOnly } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Converts common YouTube watch/short URLs to embed URLs.
-// Returns the original string unchanged for non-YouTube or already-embed URLs.
 function toEmbedUrl(url) {
   try {
     const u = new URL(url);
-    // https://www.youtube.com/watch?v=VIDEO_ID
+
     if (u.hostname.includes("youtube.com") && u.searchParams.get("v")) {
       return `https://www.youtube.com/embed/${u.searchParams.get("v")}`;
     }
-    // https://youtu.be/VIDEO_ID
+
     if (u.hostname === "youtu.be") {
       return `https://www.youtube.com/embed${u.pathname}`;
     }
-    // https://www.youtube.com/live/VIDEO_ID
+
     if (u.hostname.includes("youtube.com") && u.pathname.startsWith("/live/")) {
       return `https://www.youtube.com/embed/${u.pathname.replace("/live/", "")}`;
     }
+
     return url;
   } catch {
     return url;
   }
 }
 
-// GET /api/streams — public, all streams newest first
 router.get("/", async (req, res) => {
   try {
     const streams = await Stream.find().sort({ createdAt: -1 });
@@ -37,22 +36,111 @@ router.get("/", async (req, res) => {
   }
 });
 
-// GET /api/streams/active — public
-// IMPORTANT: this route must be defined before /:id so Express matches "active"
-// as a literal path segment, not an ObjectId.
 router.get("/active", async (req, res) => {
   try {
-    const stream = await Stream.findOne({ status: "active" }).sort({ createdAt: -1 });
+    const stream = await Stream.findOne({ status: "active" }).sort({
+      createdAt: -1,
+    });
+
     if (!stream) {
       return res.status(404).json({ message: "No active livestream at this time." });
     }
+
     res.json({ stream });
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch active stream", error: error.message });
   }
 });
 
-// POST /api/streams — admin only
+router.put("/:id/view", async (req, res) => {
+  try {
+    const stream = await Stream.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { viewers: 1 } },
+      { new: true }
+    );
+
+    if (!stream) {
+      return res.status(404).json({ message: "Stream not found" });
+    }
+
+    res.json({
+      viewers: stream.viewers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to update viewer count",
+      error: error.message,
+    });
+  }
+});
+
+router.put("/:id/like", protect, async (req, res) => {
+  try {
+    const stream = await Stream.findById(req.params.id);
+
+    if (!stream) {
+      return res.status(404).json({ message: "Stream not found" });
+    }
+
+    const userId = req.user.id;
+
+    const alreadyLiked = stream.likedBy.some(
+      (id) => id.toString() === userId
+    );
+
+    if (alreadyLiked) {
+      stream.likedBy = stream.likedBy.filter(
+        (id) => id.toString() !== userId
+      );
+    } else {
+      stream.likedBy.push(userId);
+    }
+
+    await stream.save();
+
+    res.json({
+      liked: !alreadyLiked,
+      likeCount: stream.likedBy.length,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update like", error: error.message });
+  }
+});
+
+router.post("/:id/comments", protect, async (req, res) => {
+  try {
+    const { text } = req.body;
+
+    if (!text || !text.trim()) {
+      return res.status(400).json({ message: "Comment is required" });
+    }
+
+    const stream = await Stream.findById(req.params.id);
+
+    if (!stream) {
+      return res.status(404).json({ message: "Stream not found" });
+    }
+
+    const user = await User.findById(req.user.id).select("fullName");
+
+    stream.comments.push({
+      user: req.user.id,
+      name: user?.fullName || "Parishioner",
+      text,
+    });
+
+    await stream.save();
+
+    res.status(201).json({
+      comments: stream.comments,
+      commentCount: stream.comments.length,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to add comment", error: error.message });
+  }
+});
+
 router.post("/", protect, adminOnly, async (req, res) => {
   try {
     const { title, description, url, schedule, status } = req.body;
@@ -61,7 +149,6 @@ router.post("/", protect, adminOnly, async (req, res) => {
       return res.status(400).json({ message: "Title and URL are required" });
     }
 
-    // Only one stream may be active at a time
     if (status === "active") {
       await Stream.updateMany({ status: "active" }, { status: "inactive" });
     }
@@ -82,7 +169,6 @@ router.post("/", protect, adminOnly, async (req, res) => {
   }
 });
 
-// PUT /api/streams/:id — admin only, update stream details
 router.put("/:id", protect, adminOnly, async (req, res) => {
   try {
     const { title, description, url, schedule, status } = req.body;
@@ -95,13 +181,19 @@ router.put("/:id", protect, adminOnly, async (req, res) => {
     }
 
     const updates = { title, description, schedule, status };
+
     if (url) {
       updates.url = url;
       updates.embedUrl = toEmbedUrl(url);
     }
 
-    const stream = await Stream.findByIdAndUpdate(req.params.id, updates, { new: true });
-    if (!stream) return res.status(404).json({ message: "Stream not found" });
+    const stream = await Stream.findByIdAndUpdate(req.params.id, updates, {
+      new: true,
+    });
+
+    if (!stream) {
+      return res.status(404).json({ message: "Stream not found" });
+    }
 
     res.json({ message: "Stream updated", stream });
   } catch (error) {
@@ -109,12 +201,13 @@ router.put("/:id", protect, adminOnly, async (req, res) => {
   }
 });
 
-// PUT /api/streams/:id/status — admin only
-// Setting a stream to "active" automatically sets all other active streams to "inactive".
 router.put("/:id/status", protect, adminOnly, async (req, res) => {
   try {
     const { status } = req.body;
-    if (!status) return res.status(400).json({ message: "Status is required" });
+
+    if (!status) {
+      return res.status(400).json({ message: "Status is required" });
+    }
 
     if (status === "active") {
       await Stream.updateMany({ status: "active" }, { status: "inactive" });
@@ -125,7 +218,10 @@ router.put("/:id/status", protect, adminOnly, async (req, res) => {
       { status },
       { new: true }
     );
-    if (!stream) return res.status(404).json({ message: "Stream not found" });
+
+    if (!stream) {
+      return res.status(404).json({ message: "Stream not found" });
+    }
 
     res.json({ message: "Stream status updated", stream });
   } catch (error) {
@@ -133,11 +229,14 @@ router.put("/:id/status", protect, adminOnly, async (req, res) => {
   }
 });
 
-// DELETE /api/streams/:id — admin only
 router.delete("/:id", protect, adminOnly, async (req, res) => {
   try {
     const stream = await Stream.findByIdAndDelete(req.params.id);
-    if (!stream) return res.status(404).json({ message: "Stream not found" });
+
+    if (!stream) {
+      return res.status(404).json({ message: "Stream not found" });
+    }
+
     res.json({ message: "Stream deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to delete stream", error: error.message });

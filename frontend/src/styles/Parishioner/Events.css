@@ -64,3 +64,24 @@
 }
 
 .event-btn:hover { background: #dce7fc; }
+
+.page-search-area {
+  background: var(--card);
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.page-search-area input {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 14px;
+  padding: 11px 14px;
+  font-size: 13px;
+  outline: none;
+}
+
+.page-search-area input:focus {
+  border-color: var(--primary);
+}
