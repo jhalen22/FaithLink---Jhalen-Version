@@ -98,6 +98,12 @@ router.post("/", protect, runUpload, async (req, res) => {
     // Filenames of any uploaded documents
     const uploadedDocuments = req.files ? req.files.map((f) => f.filename) : [];
 
+const documentReviews = uploadedDocuments.map((fileName) => ({
+  fileName,
+  status: "pending",
+  remarks: "",
+}));
+
     // Both object fields arrive as JSON strings when sent via FormData
     let parsedServiceDetails = {};
     let parsedSacramentSpecificData = {};
@@ -134,6 +140,7 @@ router.post("/", protect, runUpload, async (req, res) => {
       address,
       requirements,
       uploadedDocuments,
+      documentReviews,
       serviceDetails: parsedServiceDetails,
       sacramentSpecificData: parsedSacramentSpecificData,
     });
@@ -434,6 +441,188 @@ router.patch("/:id/mark-done", protect, adminOnly, async (req, res) => {
     res.json({ message: "Intention marked as done", booking });
   } catch (error) {
     res.status(500).json({ message: "Failed to mark intention as done", error: error.message });
+  }
+});
+
+// ADMIN: REVIEW ONE UPLOADED DOCUMENT AND NOTIFY USER
+router.put("/:id/document-review", protect, adminOnly, async (req, res) => {
+  try {
+    const { fileName, status, remarks } = req.body;
+
+    if (!fileName) {
+      return res.status(400).json({ message: "fileName is required" });
+    }
+
+    if (!status || !["pending", "approved", "lacking"].includes(status)) {
+      return res.status(400).json({ message: "Invalid document status" });
+    }
+
+    const booking = await Booking.findById(req.params.id).populate(
+      "parishioner",
+      "_id fullName email"
+    );
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    const existingReview = booking.documentReviews.find(
+      (review) => review.fileName === fileName
+    );
+
+    if (existingReview) {
+      existingReview.status = status;
+      existingReview.remarks = remarks || "";
+      existingReview.reviewedAt = new Date();
+    } else {
+      booking.documentReviews.push({
+        fileName,
+        status,
+        remarks: remarks || "",
+        reviewedAt: new Date(),
+      });
+    }
+
+    await booking.save();
+
+    const cleanRemarks = remarks ? ` Remarks: ${remarks}` : "";
+
+    await Notification.create({
+      user: booking.parishioner._id || booking.parishioner,
+      title: status === "approved" ? "Requirement Approved" : "Lacking Requirement",
+      message:
+        status === "approved"
+          ? `Your uploaded requirement for ${booking.sacramentType} has been approved.`
+          : `Your uploaded requirement for ${booking.sacramentType} needs attention.${cleanRemarks}`,
+      type: "booking",
+      relatedBooking: booking._id,
+    });
+
+    const updatedBooking = await Booking.findById(req.params.id).populate(
+      "parishioner",
+      "fullName email role"
+    );
+
+    res.json({
+      message: "Document review updated successfully",
+      booking: updatedBooking,
+    });
+  } catch (error) {
+    console.error("[PUT /api/bookings/:id/document-review] Error:", error);
+    res.status(500).json({
+      message: "Failed to update document review",
+      error: error.message,
+    });
+  }
+});
+
+// USER: UPLOAD ADDITIONAL / LACKING DOCUMENTS
+router.post("/:id/upload-documents", protect, runUpload, async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    if (booking.parishioner.toString() !== req.user.id && req.user.role !== "admin") {
+      return res.status(403).json({ message: "Not allowed to update this booking" });
+    }
+
+    const newFiles = req.files ? req.files.map((file) => file.filename) : [];
+
+    if (newFiles.length === 0) {
+      return res.status(400).json({ message: "Please upload at least one file" });
+    }
+
+    booking.uploadedDocuments.push(...newFiles);
+
+    newFiles.forEach((fileName) => {
+      booking.documentReviews.push({
+        fileName,
+        status: "pending",
+        remarks: "",
+      });
+    });
+
+    await booking.save();
+
+    await Notification.create({
+      user: booking.parishioner,
+      title: "New Document Uploaded",
+      message: `New document/s were uploaded for your ${booking.sacramentType} booking and are waiting for admin review.`,
+      type: "booking",
+      relatedBooking: booking._id,
+    });
+
+    res.json({
+      message: "Documents uploaded successfully",
+      booking,
+    });
+  } catch (error) {
+    console.error("[POST /api/bookings/:id/upload-documents] Error:", error);
+    res.status(500).json({
+      message: "Failed to upload documents",
+      error: error.message,
+    });
+  }
+});
+
+router.put("/:id/schedule", protect, adminOnly, async (req, res) => {
+  try {
+    const { assignedSchedule } = req.body;
+
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({
+        message: "Booking not found",
+      });
+    }
+
+    booking.assignedSchedule = assignedSchedule;
+    booking.status = "scheduled";
+
+    await booking.save();
+
+    res.json({
+      message: "Booking scheduled successfully",
+      booking,
+    });
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
+});
+
+router.put("/:id/complete", protect, adminOnly, async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({
+        message: "Booking not found",
+      });
+    }
+
+    booking.status = "completed";
+    booking.completedAt = new Date();
+
+    await booking.save();
+
+    res.json({
+      message: "Booking marked as completed",
+      booking,
+    });
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      message: "Server error",
+    });
   }
 });
 

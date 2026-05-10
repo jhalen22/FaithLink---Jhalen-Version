@@ -351,3 +351,392 @@
   margin: 4px 0 0;
   text-align: left;
 }
+
+.booking-confirmed-text {
+  color: #16a34a !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+.booking-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.booking-track-btn,
+.booking-upload-btn {
+  flex: 1;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.booking-track-btn {
+  border: none;
+  background: #1a2e4a;
+  color: #ffffff;
+}
+
+.booking-upload-btn {
+  border: 1px solid #1a2e4a;
+  background: #ffffff;
+  color: #1a2e4a;
+}
+
+.booking-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 18px;
+}
+
+.booking-modal,
+.booking-upload-modal {
+  width: 100%;
+  max-width: 430px;
+  max-height: 78vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.booking-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.booking-modal-header h3 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.booking-modal-header p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.booking-modal-close {
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.booking-tracking-box {
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 16px;
+  background: #f8fafc;
+  margin-bottom: 18px;
+}
+
+.booking-tracking-box h4,
+.booking-modal-details h4,
+.booking-modal-docs h4 {
+  margin: 0 0 14px;
+  color: #1e293b;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.booking-track-step {
+  display: flex;
+  gap: 14px;
+}
+
+.booking-track-marker {
+  width: 34px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.booking-track-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.booking-track-circle.track-done {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.booking-track-line {
+  width: 2px;
+  flex: 1;
+  min-height: 30px;
+  background: #d1d5db;
+}
+
+.booking-track-text {
+  padding-bottom: 22px;
+}
+
+.booking-track-text p {
+  margin: 2px 0 4px;
+  font-weight: 800;
+  color: #1e293b;
+  font-size: 16px;
+}
+
+.booking-track-text span {
+  display: block;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.booking-modal-details {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 16px;
+  margin-bottom: 18px;
+}
+
+.booking-modal-details > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.booking-modal-details strong {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.booking-modal-details span {
+  color: #1e293b;
+  font-size: 13px;
+  text-align: right;
+}
+
+.booking-status-text {
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.booking-status-text.approved {
+  color: #16a34a;
+}
+
+.booking-status-text.rejected {
+  color: #dc2626;
+}
+
+.booking-status-text.pending {
+  color: #f59e0b;
+}
+
+.booking-doc-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #f8fafc;
+}
+
+.booking-doc-name {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  word-break: break-word;
+}
+
+.booking-doc-status {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.booking-doc-status.doc-approved {
+  color: #16a34a;
+}
+
+.booking-doc-status.doc-lacking {
+  color: #dc2626;
+}
+
+.booking-doc-status.doc-pending {
+  color: #f59e0b;
+}
+
+.booking-doc-remarks {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.booking-doc-link {
+  font-size: 12px;
+  color: #2563eb;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.booking-empty-text {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.booking-modal-main-btn,
+.booking-submit-upload-btn {
+  width: 100%;
+  margin-top: 14px;
+  border: none;
+  border-radius: 14px;
+  padding: 14px;
+  background: #1a2e4a;
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.booking-file-input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+}
+
+.booking-selected-files {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.booking-submit-upload-btn {
+  background: #16a34a;
+}
+
+.booking-submit-upload-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.booking-modal-header h3 {
+  font-size: 22px;
+}
+
+.booking-tracking-box {
+  padding: 14px;
+}
+
+.booking-track-circle {
+  width: 30px;
+  height: 30px;
+}
+
+.booking-track-marker {
+  width: 30px;
+}
+
+.booking-track-text {
+  padding-bottom: 18px;
+}
+
+.booking-track-text p {
+  font-size: 15px;
+}
+
+.booking-track-text span {
+  font-size: 12px;
+}
+
+@media (max-width: 480px) {
+  .booking-modal,
+  .booking-upload-modal {
+    max-width: 92vw;
+    max-height: 76vh;
+    padding: 16px;
+    border-radius: 20px;
+  }
+}
+
+/* FIX: make booking tracking modal text visible */
+.booking-modal,
+.booking-modal *,
+.booking-upload-modal,
+.booking-upload-modal * {
+  opacity: 1 !important;
+}
+
+.booking-modal h3,
+.booking-modal h4,
+.booking-modal p,
+.booking-modal span,
+.booking-modal strong,
+.booking-upload-modal h3,
+.booking-upload-modal p,
+.booking-upload-modal span,
+.booking-upload-modal strong {
+  color: #1e293b !important;
+}
+
+.booking-modal-header p,
+.booking-track-text span,
+.booking-modal-details strong,
+.booking-doc-remarks,
+.booking-empty-text,
+.booking-selected-files {
+  color: #64748b !important;
+}
+
+.booking-track-circle {
+  color: #64748b !important;
+}
+
+.booking-track-circle.track-done {
+  color: #ffffff !important;
+}
+
+.booking-doc-status.doc-approved {
+  color: #16a34a !important;
+}
+
+.booking-doc-status.doc-lacking {
+  color: #dc2626 !important;
+}
+
+.booking-doc-status.doc-pending {
+  color: #f59e0b !important;
+}
+
+.booking-modal-close {
+  color: #64748b !important;
+}
+
+.booking-modal-main-btn,
+.booking-submit-upload-btn {
+  color: #ffffff !important;
+}

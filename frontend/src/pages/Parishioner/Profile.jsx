@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/Parishioner/Profile.css";
+import NotificationBell from "../../components/NotificationBell";
 
 function Profile() {
   const navigate = useNavigate();
@@ -63,14 +64,27 @@ function Profile() {
     <div className="mobile-dashboard">
       {/* ── Gradient header ── */}
       <div className="profile-header">
-        <div className="profile-avatar-wrap">
-          <div className="profile-avatar-inner">
-            <User size={44} strokeWidth={1.5} color="#5B8DEF" />
-          </div>
-        </div>
-        <h2 className="profile-name">{fullName}</h2>
-        <p className="profile-email">{email}</p>
-      </div>
+  <div
+    style={{
+      width: "100%",
+      display: "flex",
+      justifyContent: "flex-end",
+      paddingRight: "20px",
+      marginBottom: "10px",
+    }}
+  >
+    <NotificationBell />
+  </div>
+
+  <div className="profile-avatar-wrap">
+    <div className="profile-avatar-inner">
+      <User size={44} strokeWidth={1.5} color="#5B8DEF" />
+    </div>
+  </div>
+
+  <h2 className="profile-name">{fullName}</h2>
+  <p className="profile-email">{email}</p>
+</div>
 
       {/* ── Stats card (overlaps header) ── */}
       <div className="profile-stats-card">

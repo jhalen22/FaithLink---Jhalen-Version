@@ -5,6 +5,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { Bell, VideoOff, Eye } from "lucide-react";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/Parishioner/LiveMass.css";
+import NotificationBell from "../../components/NotificationBell";
 
 function LiveMass() {
   const navigate = useNavigate();
@@ -42,12 +43,7 @@ function LiveMass() {
         <h1 className="live-header-title">Live Mass</h1>
 
         <div className="top-actions">
-          <button
-            className="top-icon-btn"
-            onClick={() => navigate("/notifications")}
-          >
-            <Bell size={18} strokeWidth={2} />
-          </button>
+          <NotificationBell />
         </div>
       </div>
 

@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { ArrowLeft, Bell } from "lucide-react";
 import "../../styles/Parishioner/Bookings.css";
+import NotificationBell from "../../components/NotificationBell";
 
 function BookingForm() {
   const navigate = useNavigate();
@@ -235,12 +236,7 @@ function BookingForm() {
         </div>
 
         <div className="top-actions">
-          <button
-            className="top-icon-btn"
-            onClick={() => navigate("/notifications")}
-          >
-            <Bell size={18} strokeWidth={2} />
-          </button>
+          <NotificationBell />
         </div>
       </div>
 

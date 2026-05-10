@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import {
-  Bell, Calendar, Heart, Video, BookMarked, Play, MessageCircle, ThumbsUp,
-} from "lucide-react";
+import {Bell, Calendar, Heart, Video, BookMarked, Play, MessageCircle, ThumbsUp,} from "lucide-react";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/Parishioner/Dashboard.css";
+import NotificationBell from "../../components/NotificationBell";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -147,12 +146,7 @@ function Dashboard() {
         </div>
 
         <div className="top-icons">
-          <button
-            className="top-icon-btn"
-            onClick={() => navigate("/notifications")}
-          >
-            <Bell size={18} strokeWidth={2} />
-          </button>
+         <NotificationBell />
         </div>
       </div>
 

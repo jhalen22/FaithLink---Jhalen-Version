@@ -4,6 +4,7 @@ import axios from "axios";
 import { ArrowLeft, Search, Bell, CalendarDays, X } from "lucide-react";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/Parishioner/Events.css";
+import NotificationBell from "../../components/NotificationBell";
 
 const STATUS_CONFIG = {
   upcoming: { label: "Upcoming", color: "#1d4ed8", bg: "#eff6ff" },
@@ -69,12 +70,7 @@ function Events() {
             {showSearch ? <X size={18} /> : <Search size={18} />}
           </button>
 
-          <button
-            className="top-icon-btn"
-            onClick={() => navigate("/notifications")}
-          >
-            <Bell size={18} strokeWidth={2} />
-          </button>
+          <NotificationBell />
         </div>
       </div>
 

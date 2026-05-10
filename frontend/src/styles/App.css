@@ -53,3 +53,43 @@ button {
   background: #eef4fb;
   padding-bottom: 90px;
 }
+
+/* EMERGENCY FIX: Admin faded/white text */
+.admin-main,
+.admin-content,
+main,
+main * {
+  opacity: 1 !important;
+}
+
+main h1,
+main h2,
+main h3,
+main p,
+main span,
+main td,
+main th,
+main label,
+main div {
+  color: #1e293b !important;
+}
+
+main p,
+main small {
+  color: #64748b !important;
+}
+
+main .badge,
+main .badge *,
+main button,
+main button * {
+  color: inherit !important;
+}
+
+main input {
+  color: #ffffff !important;
+}
+
+main input::placeholder {
+  color: #cbd5e1 !important;
+}

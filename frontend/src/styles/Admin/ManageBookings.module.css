@@ -1,4 +1,6 @@
-/* ── Modal overlay ── */
+/* ─────────────────────────────────────────────
+   Modal overlay
+───────────────────────────────────────────── */
 .overlay {
   position: fixed;
   inset: 0;
@@ -9,7 +11,9 @@
   z-index: 200;
 }
 
-/* ── Slide-in side panel ── */
+/* ─────────────────────────────────────────────
+   Slide-in side panel
+───────────────────────────────────────────── */
 .panel {
   width: 420px;
   max-width: 100vw;
@@ -22,11 +26,18 @@
 }
 
 @keyframes slideIn {
-  from { transform: translateX(100%); }
-  to   { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
-/* ── Panel header ── */
+/* ─────────────────────────────────────────────
+   Panel header
+───────────────────────────────────────────── */
 .panelHeader {
   display: flex;
   align-items: flex-start;
@@ -61,14 +72,18 @@
   color: #1e293b;
 }
 
-/* ── Scrollable body ── */
+/* ─────────────────────────────────────────────
+   Scrollable body
+───────────────────────────────────────────── */
 .panelBody {
   flex: 1;
   overflow-y: auto;
   padding: 20px 24px;
 }
 
-/* ── Section ── */
+/* ─────────────────────────────────────────────
+   Section
+───────────────────────────────────────────── */
 .section {
   margin-bottom: 20px;
   padding-bottom: 20px;
@@ -89,7 +104,9 @@
   margin: 0 0 10px 0;
 }
 
-/* ── Key/value detail rows ── */
+/* ─────────────────────────────────────────────
+   Detail rows
+───────────────────────────────────────────── */
 .detailRow {
   display: flex;
   align-items: flex-start;
@@ -111,7 +128,9 @@
   word-break: break-word;
 }
 
-/* ── Notes / free text ── */
+/* ─────────────────────────────────────────────
+   Notes
+───────────────────────────────────────────── */
 .noteText {
   font-size: 0.875rem;
   color: #334155;
@@ -120,7 +139,9 @@
   white-space: pre-wrap;
 }
 
-/* ── Document list ── */
+/* ─────────────────────────────────────────────
+   Document links
+───────────────────────────────────────────── */
 .docList {
   list-style: none;
   margin: 0;
@@ -141,7 +162,9 @@
   text-decoration: underline;
 }
 
-/* ── Approve / Reject action row ── */
+/* ─────────────────────────────────────────────
+   Actions
+───────────────────────────────────────────── */
 .actions {
   display: flex;
   gap: 10px;
@@ -159,16 +182,6 @@
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
-  transition: background-color 0.2s;
-}
-
-.approveBtn:hover:not(:disabled) {
-  background-color: #15803d;
-}
-
-.approveBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 .rejectBtn {
@@ -182,20 +195,17 @@
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
-  transition: background-color 0.2s, border-color 0.2s;
 }
 
-.rejectBtn:hover:not(:disabled) {
-  background-color: #fef2f2;
-  border-color: #dc2626;
-}
-
+.approveBtn:disabled,
 .rejectBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* ── Loading / error states in table ── */
+/* ─────────────────────────────────────────────
+   States
+───────────────────────────────────────────── */
 .stateMsg {
   padding: 24px;
   color: #64748b;
@@ -208,7 +218,9 @@
   font-size: 0.875rem;
 }
 
-/* ── Service filter pill row ── */
+/* ─────────────────────────────────────────────
+   Filters
+───────────────────────────────────────────── */
 .filterRow {
   display: flex;
   flex-wrap: wrap;
@@ -226,13 +238,7 @@
   font-weight: 500;
   cursor: pointer;
   font-family: inherit;
-  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
   white-space: nowrap;
-}
-
-.filterBtn:hover {
-  background-color: #f1f5f9;
-  border-color: #94a3b8;
 }
 
 .filterBtnActive {
@@ -241,12 +247,150 @@
   color: #ffffff;
 }
 
-.filterBtnActive:hover {
-  background-color: #1e3a5f;
-  border-color: #1e3a5f;
+/* ─────────────────────────────────────────────
+   Tracking Modal
+───────────────────────────────────────────── */
+.trackingModalWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 8px 0;
 }
 
-/* ── Mobile ── */
+.trackingStep {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+}
+
+.trackingStep:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 13px;
+  top: 30px;
+  width: 2px;
+  height: 24px;
+  background: #e5e7eb;
+}
+
+.trackingCircle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.trackingDone {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.trackingRejected {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.trackingInfo {
+  flex: 1;
+}
+
+.trackingTitle {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: #94a3b8;
+}
+
+.trackingTitleDone {
+  color: #334155;
+}
+
+.trackingDesc {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* ─────────────────────────────────────────────
+   Uploaded Documents Preview
+───────────────────────────────────────────── */
+.uploadGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.uploadCard {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 10px;
+  background: #f8fafc;
+  text-align: center;
+}
+
+.uploadImage {
+  width: 100%;
+  height: 125px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.fileBox {
+  height: 125px;
+  border-radius: 10px;
+  background: #e2e8f0;
+  color: #334155;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.fileBox span {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+.fileBox p {
+  margin: 0;
+}
+
+.fileName {
+  font-size: 12px;
+  color: #475569;
+  margin: 6px 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.emptyText {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+/* ─────────────────────────────────────────────
+   Mobile
+───────────────────────────────────────────── */
 @media (max-width: 600px) {
   .panel {
     width: 100vw;
@@ -256,3 +400,430 @@
     flex: 0 0 110px;
   }
 }
+
+.reviewTableWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.reviewCard {
+  display: flex;
+  gap: 16px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 14px;
+  transition: 0.2s ease;
+}
+
+.reviewCard:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+.reviewPreview {
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.reviewImage {
+  width: 130px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+}
+
+.reviewFileBox {
+  width: 130px;
+  height: 100px;
+  border-radius: 12px;
+  border: 1px dashed #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  padding: 10px;
+}
+
+.reviewContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reviewTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.reviewFileName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 6px;
+  word-break: break-word;
+}
+
+.reviewLink {
+  text-decoration: none;
+  font-size: 13px;
+  color: #2563eb;
+  font-weight: 700;
+}
+
+.reviewStatus {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  height: fit-content;
+}
+
+.reviewApproved {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.reviewLacking {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.reviewPending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.reviewRemarks {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.reviewActions {
+  display: flex;
+  gap: 10px;
+}
+
+.reviewApproveBtn,
+.reviewRejectBtn {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.reviewApproveBtn {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.reviewApproveBtn:hover {
+  background: #15803d;
+}
+
+.reviewRejectBtn {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.reviewRejectBtn:hover {
+  background: #b91c1c;
+}
+
+@media (max-width: 768px) {
+  .reviewCard {
+    flex-direction: column;
+  }
+
+  .reviewPreview {
+    width: 100%;
+  }
+
+  .reviewImage,
+  .reviewFileBox {
+    width: 100%;
+    height: 180px;
+  }
+}
+
+.trackingAdminActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.scheduleBtn,
+.completeBtn {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.scheduleBtn {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.completeBtn {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.scheduleBtn:hover {
+  background: #1d4ed8;
+}
+
+.completeBtn:hover {
+  background: #15803d;
+}
+
+.scheduleModal {
+  width: min(420px, 92vw);
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  z-index: 9999;
+}
+
+.scheduleModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.scheduleModalHeader h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.scheduleModalHeader p {
+  margin: 5px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.scheduleLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.scheduleInput {
+  width: 100%;
+  height: 58px;
+
+  border: 2px solid #2563eb;
+  border-radius: 16px;
+
+  padding: 0 16px;
+
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+
+  background: #f8fafc;
+
+  box-sizing: border-box;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.scheduleInput::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.scheduleInput:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.scheduleInput:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.scheduleActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.scheduleCancelBtn,
+.scheduleSaveBtn {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.scheduleCancelBtn {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.scheduleSaveBtn {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.scheduleSaveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.scheduleInput,
+.scheduleInput::-webkit-datetime-edit,
+.scheduleInput::-webkit-datetime-edit-fields-wrapper,
+.scheduleInput::-webkit-datetime-edit-text,
+.scheduleInput::-webkit-datetime-edit-month-field,
+.scheduleInput::-webkit-datetime-edit-day-field,
+.scheduleInput::-webkit-datetime-edit-year-field,
+.scheduleInput::-webkit-datetime-edit-hour-field,
+.scheduleInput::-webkit-datetime-edit-minute-field,
+.scheduleInput::-webkit-datetime-edit-ampm-field {
+  color: #1e293b !important;
+}
+
+.scheduleInput::-webkit-calendar-picker-indicator {
+  filter: invert(0);
+  cursor: pointer;
+} 
+
+.confirmModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: min(420px, 92vw);
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px;
+
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  gap: 18px;
+  z-index: 100000;
+}
+
+.confirmModal h2 {
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.confirmModal p {
+  margin: 0 0 18px;
+  font-size: 15px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.confirmActions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.confirmBtn,
+.cancelBtn {
+  flex: 1;
+  border: none;
+  border-radius: 14px;
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+  min-width: 120px;
+}
+
+.confirmBtn {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.cancelBtn {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+.confirmBtn:hover {
+  background: #1d4ed8;
+}
+
+.cancelBtn:hover {
+  background: #cbd5e1;
+}
+
+.remarksInput {
+  width: 100%;
+  min-height: 100px;
+  resize: vertical;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 12px;
+  font-size: 14px;
+  color: #1e293b;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.remarksInput:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+

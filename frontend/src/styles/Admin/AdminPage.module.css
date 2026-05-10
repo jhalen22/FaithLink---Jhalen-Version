@@ -481,3 +481,119 @@
     grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   }
 }
+
+/* QUICK FIX: admin pages faded/white text */
+.pageTitle,
+.pageSubtitle,
+.tableCardTitle,
+.statLabel,
+.statValue {
+  color: #1e293b !important;
+  opacity: 1 !important;
+}
+
+.pageSubtitle {
+  color: #64748b !important;
+}
+
+.statLabel {
+  color: #64748b !important;
+}
+
+.statValue {
+  color: #1e293b !important;
+}
+
+.table th {
+  color: #64748b !important;
+  opacity: 1 !important;
+}
+
+.table td {
+  color: #1e293b !important;
+  opacity: 1 !important;
+}
+
+.toolbar,
+.tableCard,
+.statCard {
+  opacity: 1 !important;
+}
+
+.searchInput {
+  color: #ffffff !important;
+}
+
+.searchInput::placeholder {
+  color: #cbd5e1 !important;
+}
+
+/* EMERGENCY FIX: remove faded/white admin content */
+* {
+  opacity: 1;
+}
+
+h1,
+h2,
+h3,
+p,
+span,
+td,
+th,
+label,
+button,
+input {
+  opacity: 1 !important;
+}
+
+.pageTitle {
+  color: #1e293b !important;
+  opacity: 1 !important;
+}
+
+.pageSubtitle {
+  color: #64748b !important;
+  opacity: 1 !important;
+}
+
+.statCard,
+.tableCard,
+.toolbar {
+  background: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.statLabel,
+.tableCardTitle {
+  color: #64748b !important;
+  opacity: 1 !important;
+}
+
+.statValue {
+  color: #1e293b !important;
+  opacity: 1 !important;
+}
+
+.table th {
+  color: #64748b !important;
+  opacity: 1 !important;
+}
+
+.table td {
+  color: #1e293b !important;
+  opacity: 1 !important;
+}
+
+.table {
+  opacity: 1 !important;
+}
+
+.searchInput {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+.searchInput::placeholder {
+  color: #cbd5e1 !important;
+  opacity: 1 !important;
+}

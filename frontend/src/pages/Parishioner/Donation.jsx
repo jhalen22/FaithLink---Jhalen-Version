@@ -5,6 +5,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { ArrowLeft } from "lucide-react";
 import "../../styles/Parishioner/Donation.css";
 
+
 function Donation() {
   const navigate = useNavigate();
   const goBack = (fallback = "/dashboard") => {

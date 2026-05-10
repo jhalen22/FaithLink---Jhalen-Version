@@ -1,81 +1,105 @@
 const mongoose = require("mongoose");
 
+const documentReviewSchema = new mongoose.Schema(
+  {
+    fileName: {
+      type: String,
+      required: true,
+    },
+
+    status: {
+      type: String,
+      enum: ["pending", "approved", "lacking"],
+      default: "pending",
+    },
+
+    remarks: {
+      type: String,
+      default: "",
+    },
+
+    reviewedAt: {
+      type: Date,
+    },
+  },
+  { _id: true }
+);
+
 const bookingSchema = new mongoose.Schema(
   {
     parishioner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true
+      required: true,
     },
 
     sacramentType: {
       type: String,
-      required: true
+      required: true,
     },
 
     preferredDate: {
       type: Date,
-      required: true
+      required: true,
     },
 
     preferredTime: {
       type: String,
-      required: true
+      required: true,
     },
 
-    // Free-text notes from the parishioner (kept for backward compatibility)
     message: {
-      type: String
+      type: String,
     },
 
-    // Contact details submitted with the booking
     contactNumber: {
-      type: String
+      type: String,
     },
 
     address: {
-      type: String
+      type: String,
     },
 
-    // General requirements text (e.g. documents needed, special requests)
     requirements: {
-      type: String
+      type: String,
     },
 
-    // Filenames of documents uploaded at booking time (stored in /uploads)
     uploadedDocuments: [
       {
-        type: String
-      }
+        type: String,
+      },
     ],
 
-    // Flat key-value bag for any extra service-level details
+    documentReviews: [documentReviewSchema],
+
     serviceDetails: {
       type: mongoose.Schema.Types.Mixed,
-      default: {}
+      default: {},
     },
 
-    // Structured data that varies per sacrament type (e.g. childName for Baptism)
     sacramentSpecificData: {
       type: mongoose.Schema.Types.Mixed,
-      default: {}
+      default: {},
     },
 
     status: {
       type: String,
-      enum: ["pending", "approved", "rejected"],
-      default: "pending"
+      enum: ["pending", "approved", "scheduled", "completed", "rejected"],
+      default: "pending",
     },
 
     assignedSchedule: {
-      type: Date
+      type: Date,
+    },
+
+    completedAt: {
+      type: Date,
     },
 
     adminRemarks: {
-      type: String
+      type: String,
     },
 
-    // Priest-side fields — set when a priest confirms they are available
     assignedPriest: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -91,8 +115,6 @@ const bookingSchema = new mongoose.Schema(
       type: Date,
     },
 
-    // Tracks whether a Mass Intention has been celebrated (Mass Intentions only).
-    // Regular sacrament bookings leave this at the default and never use it.
     intentionStatus: {
       type: String,
       enum: ["scheduled", "done"],
@@ -100,7 +122,7 @@ const bookingSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 

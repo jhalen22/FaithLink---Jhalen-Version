@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ArrowLeft, Bell, BookMarked } from "lucide-react";
 import "../../styles/Parishioner/Bookings.css";
+import NotificationBell from "../../components/NotificationBell";
 
 const formatDate = (dateStr) => {
   if (!dateStr) return "—";
@@ -88,31 +89,7 @@ function MassIntentions() {
           <h2>Mass Intention History</h2>
         </div>
         <div className="top-actions">
-          <button
-            className="top-icon-btn"
-            onClick={() => navigate("/notifications")}
-            style={{ position: "relative" }}
-          >
-            <Bell size={18} strokeWidth={2} />
-            {unreadCount > 0 && (
-              <span style={{
-                position: "absolute",
-                top: 0, right: 0,
-                background: "#EF4444",
-                color: "#fff",
-                fontSize: 9,
-                fontWeight: 700,
-                minWidth: 15, height: 15,
-                borderRadius: 8,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                padding: "0 3px",
-                lineHeight: 1,
-                pointerEvents: "none",
-              }}>
-                {unreadCount > 9 ? "9+" : unreadCount}
-              </span>
-            )}
-          </button>
+          <NotificationBell />
         </div>
       </div>
 
