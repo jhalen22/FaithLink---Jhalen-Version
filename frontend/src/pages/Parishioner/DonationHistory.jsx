@@ -6,6 +6,10 @@ import "../../styles/Parishioner/Bookings.css";
 
 function DonationHistory() {
   const navigate = useNavigate();
+  const goBack = (fallback = "/dashboard") => {
+    if (window.history.length > 1) navigate(-1);
+    else navigate(fallback);
+  };
   const [donations, setDonations] = useState([]);
 
   useEffect(() => {
@@ -30,7 +34,7 @@ function DonationHistory() {
     <div className="mobile-dashboard">
       <div className="top-bar">
         <div className="brand">
-          <button className="back-btn" onClick={() => navigate("/profile")}>
+          <button className="back-btn" onClick={() => goBack("/profile")}>
             <ArrowLeft size={18} strokeWidth={2.5} />
           </button>
           <h2>Donation History</h2>

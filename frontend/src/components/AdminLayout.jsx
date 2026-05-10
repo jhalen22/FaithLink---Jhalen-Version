@@ -25,9 +25,11 @@ const MenuIcon = () => (
 );
 
 export default function AdminLayout() {
-  // Start collapsed (hidden) on mobile so content is visible immediately
+  // Start expanded so labels are always visible on load.
+  // The hamburger button lets users collapse the sidebar if they want.
+  // On genuine phones (< 640px) start collapsed so the overlay doesn't block content.
   const [collapsed, setCollapsed] = useState(
-    () => typeof window !== "undefined" && window.innerWidth <= 768
+    () => typeof window !== "undefined" && window.innerWidth < 640
   );
   const location = useLocation();
   const pageTitle = PAGE_TITLES[location.pathname] ?? "Admin";

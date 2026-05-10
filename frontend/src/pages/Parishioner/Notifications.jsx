@@ -38,6 +38,10 @@ const formatDate = (dateStr) => {
 
 function Notifications() {
   const navigate = useNavigate();
+  const goBack = (fallback = "/dashboard") => {
+    if (window.history.length > 1) navigate(-1);
+    else navigate(fallback);
+  };
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading]             = useState(true);
   const [error, setError]                 = useState("");
@@ -100,7 +104,7 @@ function Notifications() {
     <div className="mobile-dashboard">
       <div className="top-bar">
         <div className="brand">
-          <button className="back-btn" onClick={() => navigate("/profile")}>
+          <button className="back-btn" onClick={() => goBack("/dashboard")}>
             <ArrowLeft size={18} strokeWidth={2.5} />
           </button>
           <h2>

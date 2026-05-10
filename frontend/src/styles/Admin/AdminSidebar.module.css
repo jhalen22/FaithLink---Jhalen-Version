@@ -99,7 +99,7 @@
   width: 18px;
   height: 18px;
 }
-.navLabel { white-space: nowrap; overflow: hidden; }
+.navLabel { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; }
 
 /* Footer */
 .sidebarFooter {

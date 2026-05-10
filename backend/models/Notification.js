@@ -20,8 +20,15 @@ const notificationSchema = new mongoose.Schema(
 
     type: {
       type: String,
-      enum: ["booking", "donation", "event", "system"],
+      enum: ["booking", "donation", "event", "system", "mass-intention"],
       default: "system",
+    },
+
+    // Optional — links a Mass Intention notification back to its Booking document
+    // so the parishioner history page can match badge → card exactly.
+    relatedBooking: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Booking",
     },
 
     isRead: {

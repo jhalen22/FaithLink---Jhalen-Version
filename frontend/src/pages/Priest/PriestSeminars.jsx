@@ -23,6 +23,10 @@ const SEMINARS = [
 
 function PriestSeminars() {
   const navigate = useNavigate();
+  const goBack = (fallback = "/priest-dashboard") => {
+    if (window.history.length > 1) navigate(-1);
+    else navigate(fallback);
+  };
 
   const handleAcknowledge = (title) => {
     alert(`Schedule acknowledged: ${title}`);
@@ -33,7 +37,7 @@ function PriestSeminars() {
       {/* ── Top bar ── */}
       <div className="top-bar">
         <div className="brand">
-          <button className="back-btn" onClick={() => navigate("/priest-dashboard")}>
+          <button className="back-btn" onClick={() => goBack("/priest-dashboard")}>
             <ArrowLeft size={18} strokeWidth={2.5} />
           </button>
           <h2>Seminars</h2>

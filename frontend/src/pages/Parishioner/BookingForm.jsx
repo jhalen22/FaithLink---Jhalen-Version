@@ -7,6 +7,10 @@ import "../../styles/Parishioner/Bookings.css";
 function BookingForm() {
   const navigate = useNavigate();
   const location = useLocation();
+  const goBack = (fallback = "/dashboard") => {
+    if (window.history.length > 1) navigate(-1);
+    else navigate(fallback);
+  };
 
   const sacramentType = location.state?.sacramentType || "Sacrament";
 
@@ -40,8 +44,50 @@ function BookingForm() {
 
   const [documents, setDocuments] = useState([]);
 
+  // Allowed Mass Intention times stored in 24-hour "HH:MM" format (same as the rest of the app).
+  const MASS_TIMES_WEEKDAY = ["06:00", "18:00"];
+  const MASS_TIMES_SUNDAY  = ["06:00", "08:00", "09:30", "16:30", "18:00"];
+
+  const getMassTimesForDate = (dateStr) => {
+    if (!dateStr) return [];
+    // Parse as local midnight to avoid UTC-vs-local day-of-week mismatch.
+    const [y, m, d] = dateStr.split("-").map(Number);
+    const dayOfWeek = new Date(y, m - 1, d).getDay(); // 0 = Sunday
+    return dayOfWeek === 0 ? MASS_TIMES_SUNDAY : MASS_TIMES_WEEKDAY;
+  };
+
+  const formatMassTime = (time24) => {
+    const [h, min] = time24.split(":");
+    const hour = parseInt(h, 10);
+    const suffix = hour >= 12 ? "PM" : "AM";
+    const display = hour % 12 || 12;
+    return `${display}:${min} ${suffix}`;
+  };
+
+  const getTodayDateString = () => {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, "0");
+    const d = String(now.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  };
+
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    // When the date changes for a Mass Intention, reset preferredTime if it is
+    // no longer valid for the newly selected day of the week.
+    if (sacramentType === "Mass Intentions" && name === "preferredDate") {
+      const allowed = getMassTimesForDate(value);
+      setForm({
+        ...form,
+        preferredDate: value,
+        preferredTime: allowed.includes(form.preferredTime) ? form.preferredTime : "",
+      });
+      return;
+    }
+
+    setForm({ ...form, [name]: value });
   };
 
   const handleFileChange = (e) => {
@@ -113,6 +159,26 @@ function BookingForm() {
   const submitBooking = async (e) => {
     e.preventDefault();
 
+    if (sacramentType === "Mass Intentions") {
+      if (!form.preferredDate) {
+        alert("Please select a date for your Mass Intention.");
+        return;
+      }
+      if (form.preferredDate < getTodayDateString()) {
+        alert("The selected date is in the past. Please choose today or a future date.");
+        return;
+      }
+      if (!form.preferredTime) {
+        alert("Please select a Preferred Mass Time.");
+        return;
+      }
+      const allowed = getMassTimesForDate(form.preferredDate);
+      if (!allowed.includes(form.preferredTime)) {
+        alert("The selected Mass time is not valid for the chosen date. Please select an allowed time.");
+        return;
+      }
+    }
+
     try {
       const token = localStorage.getItem("token");
 
@@ -139,7 +205,7 @@ function BookingForm() {
       });
 
       alert("Booking submitted successfully!");
-      navigate("/bookings");
+      navigate(sacramentType === "Mass Intentions" ? "/mass-intentions" : "/bookings");
     } catch (err) {
       alert(err.response?.data?.message || "Booking failed");
     }
@@ -151,7 +217,7 @@ function BookingForm() {
         <div className="brand">
           <button
             className="back-btn"
-            onClick={() => navigate("/select-service")}
+            onClick={() => goBack(sacramentType === "Mass Intentions" ? "/mass-intentions" : "/select-service")}
           >
             <ArrowLeft size={18} strokeWidth={2.5} />
           </button>
@@ -490,27 +556,6 @@ function BookingForm() {
                 onChange={handleChange}
               />
 
-              <div className="two-grid">
-                <div>
-                  <label>Email</label>
-                  <input
-                    name="email"
-                    placeholder="your@email.com"
-                    value={form.email}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div>
-                  <label>Phone</label>
-                  <input
-                    name="phone"
-                    placeholder="+63"
-                    value={form.phone}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-
               <label>Intention For</label>
               <input
                 name="intentionFor"
@@ -557,26 +602,52 @@ function BookingForm() {
                 type="date"
                 value={form.preferredDate}
                 onChange={handleChange}
+                min={sacramentType === "Mass Intentions" ? getTodayDateString() : undefined}
               />
             </div>
             <div>
-              <label>Preferred Time</label>
-              <input
-                name="preferredTime"
-                type="time"
-                value={form.preferredTime}
-                onChange={handleChange}
-              />
+              <label>
+                {sacramentType === "Mass Intentions" ? "Preferred Mass Time" : "Preferred Time"}
+              </label>
+
+              {sacramentType === "Mass Intentions" ? (
+                <select
+                  name="preferredTime"
+                  value={form.preferredTime}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">
+                    {form.preferredDate ? "Select time" : "Select date first"}
+                  </option>
+                  {getMassTimesForDate(form.preferredDate).map((t) => (
+                    <option key={t} value={t}>
+                      {formatMassTime(t)}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  name="preferredTime"
+                  type="time"
+                  value={form.preferredTime}
+                  onChange={handleChange}
+                />
+              )}
             </div>
           </div>
 
-          <label>Complete Address</label>
-          <input
-            name="address"
-            placeholder="Street, Barangay, City"
-            value={form.address}
-            onChange={handleChange}
-          />
+          {sacramentType !== "Mass Intentions" && (
+            <>
+              <label>Complete Address</label>
+              <input
+                name="address"
+                placeholder="Street, Barangay, City"
+                value={form.address}
+                onChange={handleChange}
+              />
+            </>
+          )}
 
           <label>Special Notes</label>
           <textarea
@@ -624,7 +695,7 @@ function BookingForm() {
             <button
               type="button"
               className="cancel-btn"
-              onClick={() => navigate("/bookings")}
+              onClick={() => goBack(sacramentType === "Mass Intentions" ? "/mass-intentions" : "/bookings")}
             >
               Cancel
             </button>
