@@ -1,22 +1,23 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ArrowLeft, Search, Bell, CalendarDays } from "lucide-react";
+import { ArrowLeft, Search, Bell, CalendarDays, X } from "lucide-react";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/Parishioner/Events.css";
 
-// Status label and colour mapping
 const STATUS_CONFIG = {
-  upcoming:  { label: "Upcoming",  color: "#1d4ed8", bg: "#eff6ff" },
-  ongoing:   { label: "Ongoing",   color: "#166534", bg: "#dcfce7" },
+  upcoming: { label: "Upcoming", color: "#1d4ed8", bg: "#eff6ff" },
+  ongoing: { label: "Ongoing", color: "#166534", bg: "#dcfce7" },
   completed: { label: "Completed", color: "#64748b", bg: "#f1f5f9" },
 };
 
 function Events() {
   const navigate = useNavigate();
-  const [events, setEvents]   = useState([]);
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState("");
+  const [error, setError] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -29,8 +30,22 @@ function Events() {
         setLoading(false);
       }
     };
+
     fetchEvents();
   }, []);
+
+  const filteredEvents = events.filter((event) => {
+    const searchableText = `
+      ${event.title || ""}
+      ${event.description || ""}
+      ${event.date || ""}
+      ${event.time || ""}
+      ${event.location || ""}
+      ${event.status || ""}
+    `.toLowerCase();
+
+    return searchableText.includes(searchTerm.toLowerCase());
+  });
 
   return (
     <div className="mobile-dashboard">
@@ -41,15 +56,35 @@ function Events() {
           </button>
           <h2>Events</h2>
         </div>
+
         <div className="top-actions">
-          <button className="top-icon-btn" onClick={() => alert("Search coming soon")}>
-            <Search size={18} strokeWidth={2} />
+          <button
+            className="top-icon-btn"
+            onClick={() => setShowSearch((prev) => !prev)}
+          >
+            {showSearch ? <X size={18} /> : <Search size={18} />}
           </button>
-          <button className="top-icon-btn" onClick={() => navigate("/notifications")}>
+
+          <button
+            className="top-icon-btn"
+            onClick={() => navigate("/notifications")}
+          >
             <Bell size={18} strokeWidth={2} />
           </button>
         </div>
       </div>
+
+      {showSearch && (
+        <div className="page-search-area">
+          <input
+            type="text"
+            placeholder="Search events by title, date, location..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            autoFocus
+          />
+        </div>
+      )}
 
       <div className="events-page">
         {loading ? (
@@ -60,23 +95,27 @@ function Events() {
           <div className="empty-bookings">
             <p style={{ color: "#dc2626" }}>{error}</p>
           </div>
-        ) : events.length === 0 ? (
+        ) : filteredEvents.length === 0 ? (
           <div className="empty-bookings">
             <div className="empty-icon">
               <CalendarDays size={34} strokeWidth={1.5} />
             </div>
-            <h3>No Events Posted</h3>
-            <p>Parish events and announcements will appear here once posted by the admin.</p>
+            <h3>No Events Found</h3>
+            <p>
+              {searchTerm
+                ? "No events match your search."
+                : "Parish events and announcements will appear here once posted by the admin."}
+            </p>
           </div>
         ) : (
-          events.map((event) => {
+          filteredEvents.map((event) => {
             const cfg = STATUS_CONFIG[event.status] || STATUS_CONFIG.upcoming;
+
             return (
               <div className="event-card" key={event._id}>
                 <div className="event-placeholder">⛪</div>
 
                 <div className="event-content">
-                  {/* Status badge */}
                   <span
                     style={{
                       display: "inline-block",

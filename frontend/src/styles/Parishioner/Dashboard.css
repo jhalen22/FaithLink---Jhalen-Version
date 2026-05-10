@@ -89,3 +89,262 @@
 }
 
 .post-actions button:hover { background: #dce7fc; }
+
+.liked-btn {
+  background: #5b8def !important;
+  color: white !important;
+}
+
+.comments-box {
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.comment-item {
+  background: rgba(91, 141, 239, 0.12);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.comment-item strong {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.comment-item p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.comment-input-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.comment-input-row input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.comment-input-row button {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #5b8def;
+  color: white;
+  font-weight: 700;
+}
+
+.embedded-video-box {
+  width: 100%;
+  margin: 22px 0;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #0f172a;
+}
+
+.embedded-video-box iframe {
+  width: 100%;
+  height: 230px;
+  border: none;
+  display: block;
+}
+
+.liked-btn {
+  background: #5b8def !important;
+  color: white !important;
+}
+
+.comments-box {
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.no-comments {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.comment-item {
+  background: rgba(91, 141, 239, 0.12);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.comment-item strong {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.comment-item p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.comment-input-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.comment-input-row input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.comment-input-row button {
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+  background: #5b8def;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+} 
+
+.liked-btn {
+  background: #5b8def !important;
+  color: white !important;
+}
+
+.comments-box {
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.no-comments {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.comment-item {
+  background: rgba(91, 141, 239, 0.12);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.comment-item strong {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.comment-item p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.comment-input-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.comment-input-row input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.comment-input-row button {
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+  background: #5b8def;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.home-video-thumbnail {
+  position: relative;
+  width: 100%;
+  height: 230px;
+  margin: 22px 0;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #0f172a;
+  cursor: pointer;
+}
+
+.home-video-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-video-overlay p {
+  margin-top: 10px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.embedded-video-box {
+  width: 100%;
+  margin: 22px 0;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #0f172a;
+}
+
+.embedded-video-box iframe {
+  width: 100%;
+  height: 230px;
+  border: none;
+  display: block;
+}
+
+.live-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.live-viewers {
+  font-size: 11px;
+  font-weight: 700;
+  color: #93c5fd;
+  background: rgba(59, 130, 246, 0.12);
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.mass-title {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}

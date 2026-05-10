@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useEffect } from "react";
 import "./styles/App.css";
 
 /* ── Shared admin shell ── */
@@ -40,6 +41,19 @@ import Settings           from "./pages/Parishioner/Settings";
 import Notifications      from "./pages/Parishioner/Notifications";
 
 function App() {
+
+  useEffect(() => {
+  const savedSettings = JSON.parse(localStorage.getItem("parishionerSettings"));
+
+  if (savedSettings?.darkMode) {
+    document.body.classList.add("faithlink-dark-mode");
+    document.documentElement.classList.add("faithlink-dark-mode");
+  } else {
+    document.body.classList.remove("faithlink-dark-mode");
+    document.documentElement.classList.remove("faithlink-dark-mode");
+  }
+}, []);
+
   return (
     <BrowserRouter>
       <Routes>

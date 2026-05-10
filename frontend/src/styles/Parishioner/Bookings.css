@@ -296,3 +296,58 @@
 }
 
 .submit-btn:hover { opacity: 0.9; }
+
+.page-search-area {
+  background: var(--card);
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.page-search-area input {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 14px;
+  padding: 11px 14px;
+  font-size: 13px;
+  outline: none;
+}
+
+.page-search-area input:focus {
+  border-color: var(--primary);
+}
+
+.requirements-box {
+  margin-bottom: 14px;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(91, 141, 239, 0.08);
+  border: 1px solid var(--border);
+}
+
+.requirements-box h5 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.requirements-box ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.requirements-box li {
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.selected-file-count {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 4px 0 0;
+  text-align: left;
+}
