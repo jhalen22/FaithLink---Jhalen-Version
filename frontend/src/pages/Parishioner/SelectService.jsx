@@ -1,35 +1,33 @@
 import { useNavigate } from "react-router-dom";
 import {
-  ArrowLeft,
-  Bell,
-  Droplets,
-  BookOpen,
-  Star,
-  Heart,
-  Activity,
-  BookMarked,
+  ArrowLeft, Bell, Droplets, BookOpen, Star, Heart, Activity
 } from "lucide-react";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/Parishioner/Bookings.css";
 import "../../styles/Parishioner/SelectService.css";
 
+// Mass Intentions is intentionally excluded — it is accessed from the
+// dashboard Intentions quick-action, not through Select a Service.
 const services = [
-  { name: "Baptism", subtitle: "Infant & Adult", icon: Droplets },
-  { name: "Funeral Mass", subtitle: "Funeral Service", icon: BookOpen },
-  { name: "Confirmation", subtitle: "Holy Spirit", icon: Star },
-  { name: "Wedding", subtitle: "Holy Matrimony", icon: Heart },
-  { name: "Anointing of the Sick", subtitle: "Healing Prayer", icon: Activity },
-  { name: "Mass Intentions", subtitle: "Prayer Offering", icon: BookMarked },
+  { name: "Baptism",               subtitle: "Infant & Adult",   icon: Droplets },
+  { name: "Funeral Mass",          subtitle: "Funeral Service",  icon: BookOpen },
+  { name: "Confirmation",          subtitle: "Holy Spirit",      icon: Star     },
+  { name: "Wedding",               subtitle: "Holy Matrimony",   icon: Heart    },
+  { name: "Anointing of the Sick", subtitle: "Healing Prayer",   icon: Activity },
 ];
 
 function SelectService() {
   const navigate = useNavigate();
+  const goBack = (fallback = "/dashboard") => {
+    if (window.history.length > 1) navigate(-1);
+    else navigate(fallback);
+  };
 
   return (
     <div className="mobile-dashboard">
       <div className="top-bar">
         <div className="brand">
-          <button className="back-btn" onClick={() => navigate("/dashboard")}>
+          <button className="back-btn" onClick={() => goBack("/bookings")}>
             <ArrowLeft size={18} strokeWidth={2.5} />
           </button>
         </div>

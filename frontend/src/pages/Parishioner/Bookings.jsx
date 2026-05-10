@@ -25,7 +25,9 @@ function Bookings() {
         }
       );
 
-      setBookings(res.data);
+      // Mass Intentions are tracked separately in the Intentions section,
+      // so exclude them from My Bookings.
+      setBookings((res.data || []).filter((b) => b.sacramentType !== "Mass Intentions"));
     } catch (err) {
       console.log(err.response?.data || err.message);
     }

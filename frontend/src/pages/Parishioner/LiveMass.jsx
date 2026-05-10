@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { QRCodeSVG } from "qrcode.react";
-import { ArrowLeft, Bell, VideoOff, Eye } from "lucide-react";
+import { Bell, VideoOff, Eye } from "lucide-react";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/Parishioner/LiveMass.css";
 
@@ -39,10 +39,6 @@ function LiveMass() {
   return (
     <div className="live-page">
       <div className="live-header">
-        <button className="live-back" onClick={() => navigate("/dashboard")}>
-          <ArrowLeft size={18} strokeWidth={2.5} />
-        </button>
-
         <h1 className="live-header-title">Live Mass</h1>
 
         <div className="top-actions">

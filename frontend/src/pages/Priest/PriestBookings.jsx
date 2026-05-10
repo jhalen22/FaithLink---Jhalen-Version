@@ -16,7 +16,11 @@ const formatDate = (dateStr) => {
 };
 
 function PriestBookings() {
-  const navigate    = useNavigate();
+  const navigate = useNavigate();
+  const goBack = (fallback = "/priest-dashboard") => {
+    if (window.history.length > 1) navigate(-1);
+    else navigate(fallback);
+  };
   const [bookings, setBookings]     = useState([]);
   const [loading, setLoading]       = useState(true);
   const [confirming, setConfirming] = useState(null);
@@ -60,7 +64,7 @@ function PriestBookings() {
       {/* ── Top bar ── */}
       <div className="top-bar">
         <div className="brand">
-          <button className="back-btn" onClick={() => navigate("/priest-dashboard")}>
+          <button className="back-btn" onClick={() => goBack("/priest-dashboard")}>
             <ArrowLeft size={18} strokeWidth={2.5} />
           </button>
           <h2>Bookings</h2>

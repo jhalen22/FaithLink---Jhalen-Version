@@ -1,21 +1,35 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
-  Bell,
-  Calendar,
-  Heart,
-  Video,
-  BookMarked,
-  Play,
-  MessageCircle,
-  ThumbsUp,
+  Bell, Calendar, Heart, Video, BookMarked, Play, MessageCircle, ThumbsUp,
 } from "lucide-react";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/Parishioner/Dashboard.css";
 
 function Dashboard() {
   const navigate = useNavigate();
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    axios
+      .get("http://localhost:5000/api/notifications", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => setNotifications(res.data || []))
+      .catch(() => {}); // silently ignore — badge is non-critical
+  }, []);
+
+  // Count unread notifications whose title or message is about a Mass Intention.
+  // Booking, donation, and system notifications are excluded.
+  const unreadIntentionCount = notifications.filter(
+    (n) =>
+      !n.isRead &&
+      (n.title?.toLowerCase().includes("mass intention") ||
+       n.message?.toLowerCase().includes("mass intention"))
+  ).length;
 
   const [stream, setStream] = useState(null);
   const [showHomeVideo, setShowHomeVideo] = useState(false);
@@ -163,17 +177,32 @@ function Dashboard() {
           </div>
           <p>Live Mass</p>
         </div>
-
-        <div
-          className="action-item"
-          onClick={() =>
-            navigate("/booking-form", {
-              state: { sacramentType: "Mass Intentions" },
-            })
-          }
-        >
-          <div className="action-icon">
-            <BookMarked size={24} strokeWidth={1.8} />
+        <div className="action-item" onClick={() => navigate("/mass-intentions")}>
+          <div style={{ position: "relative", display: "inline-flex" }}>
+            <div className="action-icon"><BookMarked size={24} strokeWidth={1.8} /></div>
+            {unreadIntentionCount > 0 && (
+              <span style={{
+                position: "absolute",
+                top: -4,
+                right: -4,
+                background: "#EF4444",
+                color: "#fff",
+                fontSize: 10,
+                fontWeight: 700,
+                minWidth: 18,
+                height: 18,
+                borderRadius: 9,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "0 3px",
+                lineHeight: 1,
+                pointerEvents: "none",
+                boxShadow: "0 0 0 2px #f6f8fc",
+              }}>
+                {unreadIntentionCount > 9 ? "9+" : unreadIntentionCount}
+              </span>
+            )}
           </div>
           <p>Intentions</p>
         </div>

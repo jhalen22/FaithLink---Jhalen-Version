@@ -90,6 +90,14 @@ const bookingSchema = new mongoose.Schema(
     priestConfirmedAt: {
       type: Date,
     },
+
+    // Tracks whether a Mass Intention has been celebrated (Mass Intentions only).
+    // Regular sacrament bookings leave this at the default and never use it.
+    intentionStatus: {
+      type: String,
+      enum: ["scheduled", "done"],
+      default: "scheduled",
+    },
   },
   {
     timestamps: true

@@ -59,6 +59,42 @@ router.post("/", protect, runUpload, async (req, res) => {
       });
     }
 
+    // Mass Intention schedule validation — enforced server-side so it cannot be
+    // bypassed by manipulating the frontend.
+    if (sacramentType === "Mass Intentions") {
+      const WEEKDAY_TIMES = ["06:00", "18:00"];
+      const SUNDAY_TIMES  = ["06:00", "08:00", "09:30", "16:30", "18:00"];
+
+      // Parse the date as local midnight so the day-of-week is always correct
+      // regardless of the server's UTC offset.
+      const [yr, mo, dy] = preferredDate.split("T")[0].split("-").map(Number);
+      const submittedDate = new Date(yr, mo - 1, dy);
+
+      // Reject past dates.
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (submittedDate < today) {
+        return res.status(400).json({
+          message: "The preferred date for a Mass Intention cannot be in the past.",
+        });
+      }
+
+      const dayOfWeek = submittedDate.getDay(); // 0 = Sunday
+      const allowedTimes = dayOfWeek === 0 ? SUNDAY_TIMES : WEEKDAY_TIMES;
+
+      if (!allowedTimes.includes(preferredTime)) {
+        return res.status(400).json({
+          message: `Invalid preferred time for Mass Intention. ${
+            dayOfWeek === 0 ? "Sunday" : "Weekday/Saturday"
+          } masses are held at: ${allowedTimes.map((t) => {
+            const [h, m] = t.split(":");
+            const hr = parseInt(h, 10);
+            return `${hr % 12 || 12}:${m} ${hr >= 12 ? "PM" : "AM"}`;
+          }).join(", ")}.`,
+        });
+      }
+    }
+
     // Filenames of any uploaded documents
     const uploadedDocuments = req.files ? req.files.map((f) => f.filename) : [];
 
@@ -93,6 +129,8 @@ router.post("/", protect, runUpload, async (req, res) => {
       preferredTime,
       message,
       contactNumber,
+      // Mass Intentions are automatically approved — no admin review needed.
+      status: sacramentType === "Mass Intentions" ? "approved" : "pending",
       address,
       requirements,
       uploadedDocuments,
@@ -288,6 +326,114 @@ router.put("/:id/priest-confirm", protect, async (req, res) => {
       message: "Failed to confirm availability",
       error: error.message,
     });
+  }
+});
+
+// PATCH /api/bookings/mass-intentions/mark-done-group — admin only
+// Marks every Mass Intention for a given date+time as done and notifies parishioners.
+// Must be defined before the parameterised /:id route so Express does not treat
+// "mass-intentions" as a booking ID.
+router.patch("/mass-intentions/mark-done-group", protect, adminOnly, async (req, res) => {
+  try {
+    const { preferredDate, preferredTime } = req.body;
+
+    if (!preferredDate || !preferredTime) {
+      return res.status(400).json({ message: "preferredDate and preferredTime are required" });
+    }
+
+    // Build a UTC day window so the date query is timezone-safe
+    const start = new Date(preferredDate);
+    start.setUTCHours(0, 0, 0, 0);
+    const end = new Date(preferredDate);
+    end.setUTCHours(23, 59, 59, 999);
+
+    // Fetch only intentions not yet done so we know whom to notify
+    const affected = await Booking.find({
+      sacramentType: "Mass Intentions",
+      preferredDate: { $gte: start, $lte: end },
+      preferredTime,
+      intentionStatus: { $ne: "done" },
+    }).populate("parishioner", "_id fullName email");
+
+    if (affected.length === 0) {
+      return res.json({ message: "No pending intentions to update", count: 0 });
+    }
+
+    // Mark all intentions in this slot as done (including any already-done ones so count is consistent)
+    await Booking.updateMany(
+      {
+        sacramentType: "Mass Intentions",
+        preferredDate: { $gte: start, $lte: end },
+        preferredTime,
+      },
+      { intentionStatus: "done" }
+    );
+
+    // Build human-readable date/time strings for the notification message
+    const dateDisplay = start.toLocaleDateString("en-PH", {
+      month: "long", day: "numeric", year: "numeric",
+    });
+    const [h, m] = preferredTime.split(":");
+    const hr = parseInt(h, 10);
+    const timeDisplay = `${hr % 12 || 12}:${m} ${hr >= 12 ? "PM" : "AM"}`;
+
+    // Create one notification per affected parishioner, linking back to the booking
+    // so the parishioner history page can match the badge to the exact card.
+    await Promise.all(
+      affected.map((b) => {
+        const intentionFor = b.sacramentSpecificData?.intentionFor || "your intention";
+        return Notification.create({
+          user: b.parishioner._id,
+          title: "Mass Intention Completed",
+          message: `Your Mass Intention for ${intentionFor} on ${dateDisplay} at ${timeDisplay} has been completed. Thank you for your prayer.`,
+          type: "mass-intention",
+          relatedBooking: b._id,
+        });
+      })
+    );
+
+    res.json({ message: "Mass intentions marked as done", count: affected.length });
+  } catch (error) {
+    console.error("[PATCH /mass-intentions/mark-done-group] Error:", error);
+    res.status(500).json({ message: "Failed to mark intentions as done", error: error.message });
+  }
+});
+
+// PATCH /api/bookings/:id/mark-done — admin only
+// Marks a single Mass Intention as done and notifies the parishioner.
+router.patch("/:id/mark-done", protect, adminOnly, async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id).populate("parishioner", "_id fullName email");
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+    if (booking.sacramentType !== "Mass Intentions") {
+      return res.status(400).json({ message: "This route is only for Mass Intentions" });
+    }
+
+    booking.intentionStatus = "done";
+    await booking.save();
+
+    const dateDisplay = new Date(booking.preferredDate).toLocaleDateString("en-PH", {
+      month: "long", day: "numeric", year: "numeric",
+    });
+    const [h, m] = booking.preferredTime.split(":");
+    const hr = parseInt(h, 10);
+    const timeDisplay = `${hr % 12 || 12}:${m} ${hr >= 12 ? "PM" : "AM"}`;
+    const intentionFor = booking.sacramentSpecificData?.intentionFor || "your intention";
+
+    await Notification.create({
+      user: booking.parishioner._id,
+      title: "Mass Intention Completed",
+      message: `Your Mass Intention for ${intentionFor} on ${dateDisplay} at ${timeDisplay} has been completed. Thank you for your prayer.`,
+      type: "mass-intention",
+      relatedBooking: booking._id,
+    });
+
+    res.json({ message: "Intention marked as done", booking });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to mark intention as done", error: error.message });
   }
 });
 

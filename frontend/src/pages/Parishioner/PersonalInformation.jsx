@@ -5,6 +5,10 @@ import { ArrowLeft } from "lucide-react";
 
 function PersonalInformation() {
   const navigate = useNavigate();
+  const goBack = (fallback = "/dashboard") => {
+    if (window.history.length > 1) navigate(-1);
+    else navigate(fallback);
+  };
 
   const [form, setForm] = useState({
     fullName: localStorage.getItem("fullName") || "",
@@ -52,7 +56,7 @@ function PersonalInformation() {
     <div className="mobile-dashboard">
       <div className="top-bar">
         <div className="brand">
-          <button className="back-btn" onClick={() => navigate("/profile")}>
+          <button className="back-btn" onClick={() => goBack("/profile")}>
             <ArrowLeft size={18} strokeWidth={2.5} />
           </button>
           <h2>Personal Information</h2>

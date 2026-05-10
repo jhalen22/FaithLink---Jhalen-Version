@@ -7,6 +7,10 @@ import "../../styles/Parishioner/Donation.css";
 
 function Donation() {
   const navigate = useNavigate();
+  const goBack = (fallback = "/dashboard") => {
+    if (window.history.length > 1) navigate(-1);
+    else navigate(fallback);
+  };
   const [step, setStep] = useState(1);
   const [method, setMethod] = useState("GCash");
   const [receipt, setReceipt] = useState(null);
@@ -69,7 +73,7 @@ function Donation() {
   return (
     <div className="donation-screen">
       <div className="donation-header">
-        <button className="back-btn" onClick={() => navigate("/dashboard")}>
+        <button className="back-btn" onClick={() => goBack("/dashboard")}>
           <ArrowLeft size={18} strokeWidth={2.5} />
         </button>
 
