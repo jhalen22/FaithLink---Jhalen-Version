@@ -140,7 +140,7 @@ export default function ManageAnnouncements() {
             Create and manage parish events and announcements
           </p>
         </div>
-        <button className={styles.primaryBtn} onClick={openAdd}>
+        <button className={styles.primaryBtn} onClick={openAdd} style={{ backgroundColor: '#5B8DEF' }}>
           + Add Announcement
         </button>
       </div>
@@ -244,6 +244,7 @@ export default function ManageAnnouncements() {
                 type="submit"
                 className={styles.primaryBtn}
                 disabled={saving}
+                style={{ backgroundColor: '#5B8DEF' }}
               >
                 {saving ? "Saving…" : editingId ? "Save Changes" : "Add Announcement"}
               </button>
