@@ -29,7 +29,7 @@ app.use("/api/events", eventRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/admin", adminRoutes);
-app.use("/api/streams", streamRoutes);
+app.use("/api/livestream", streamRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend is working!");

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import {Bell, Calendar, Heart, Video, BookMarked, Play, MessageCircle, ThumbsUp,} from "lucide-react";
+import { Calendar, Heart, Video, BookMarked, Play } from "lucide-react";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/Parishioner/Dashboard.css";
 import NotificationBell from "../../components/NotificationBell";
@@ -18,11 +18,9 @@ function Dashboard() {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setNotifications(res.data || []))
-      .catch(() => {}); // silently ignore — badge is non-critical
+      .catch(() => {});
   }, []);
 
-  // Count unread notifications whose title or message is about a Mass Intention.
-  // Booking, donation, and system notifications are excluded.
   const unreadIntentionCount = notifications.filter(
     (n) =>
       !n.isRead &&
@@ -30,58 +28,21 @@ function Dashboard() {
        n.message?.toLowerCase().includes("mass intention"))
   ).length;
 
-  const [stream, setStream] = useState(null);
+  const [stream, setStream]           = useState(null);
   const [showHomeVideo, setShowHomeVideo] = useState(false);
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
-  const [showComments, setShowComments] = useState(false);
-  const [commentText, setCommentText] = useState("");
-  const [comments, setComments] = useState([]);
-
-  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetchActiveStream();
+    axios
+      .get("http://localhost:5000/api/livestream")
+      .then((res) => setStream(res.data.stream || null))
+      .catch(() => setStream(null));
   }, []);
-
-  const fetchActiveStream = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/streams/active");
-      const activeStream = res.data.stream;
-
-      setStream(activeStream);
-      setLikeCount(activeStream.likedBy?.length || 0);
-      setComments(activeStream.comments || []);
-
-      if (token) {
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        const userId = payload.id;
-
-        const userLiked = activeStream.likedBy?.some(
-          (id) => id.toString() === userId
-        );
-
-        setLiked(userLiked);
-      }
-    } catch {
-      setStream(null);
-      setLikeCount(0);
-      setComments([]);
-    }
-  };
 
   const getYoutubeId = (url = "") => {
     try {
       const parsedUrl = new URL(url);
-
-      if (parsedUrl.hostname.includes("youtube.com")) {
-        return parsedUrl.searchParams.get("v");
-      }
-
-      if (parsedUrl.hostname.includes("youtu.be")) {
-        return parsedUrl.pathname.replace("/", "");
-      }
-
+      if (parsedUrl.hostname.includes("youtube.com")) return parsedUrl.searchParams.get("v");
+      if (parsedUrl.hostname.includes("youtu.be")) return parsedUrl.pathname.replace("/", "");
       return "";
     } catch {
       return "";
@@ -92,48 +53,6 @@ function Dashboard() {
   const thumbnailUrl = videoId
     ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
     : "";
-
-  const handleLike = async () => {
-    if (!stream) return;
-
-    try {
-      const res = await axios.put(
-        `http://localhost:5000/api/streams/${stream._id}/like`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setLiked(res.data.liked);
-      setLikeCount(res.data.likeCount);
-    } catch {
-      alert("Please log in to like the live mass.");
-    }
-  };
-
-  const handleAddComment = async () => {
-    if (!stream || !commentText.trim()) return;
-
-    try {
-      const res = await axios.post(
-        `http://localhost:5000/api/streams/${stream._id}/comments`,
-        { text: commentText },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setComments(res.data.comments || []);
-      setCommentText("");
-    } catch {
-      alert("Please log in to comment.");
-    }
-  };
 
   return (
     <div className="mobile-dashboard">
@@ -146,7 +65,7 @@ function Dashboard() {
         </div>
 
         <div className="top-icons">
-         <NotificationBell />
+          <NotificationBell />
         </div>
       </div>
 
@@ -171,9 +90,12 @@ function Dashboard() {
           </div>
           <p>Live Mass</p>
         </div>
+
         <div className="action-item" onClick={() => navigate("/mass-intentions")}>
           <div style={{ position: "relative", display: "inline-flex" }}>
-            <div className="action-icon"><BookMarked size={24} strokeWidth={1.8} /></div>
+            <div className="action-icon">
+              <BookMarked size={24} strokeWidth={1.8} />
+            </div>
             {unreadIntentionCount > 0 && (
               <span style={{
                 position: "absolute",
@@ -211,22 +133,17 @@ function Dashboard() {
           <div>
             <h3>Holy Cross Parish</h3>
             <div className="live-meta-row">
-  <span className="live-pill">LIVE NOW</span>
-
-  <span className="live-viewers">
-    👁 {stream?.viewers || 0} watching
-  </span>
-</div>
-
-<p className="mass-title">
-  {stream?.title || "Sunday Holy Mass"}
-</p>
+              {stream?.status === "live" && (
+                <span className="live-pill">LIVE NOW</span>
+              )}
+            </div>
+            <p className="mass-title">
+              {stream?.title || "Sunday Holy Mass"}
+            </p>
           </div>
         </div>
 
-        <p className="post-text">
-          {stream?.description || "Join us for Sunday Holy Mass."}
-        </p>
+        <p className="post-text">Join us for Sunday Holy Mass.</p>
 
         {!showHomeVideo ? (
           <div
@@ -234,7 +151,6 @@ function Dashboard() {
             onClick={() => setShowHomeVideo(true)}
           >
             {thumbnailUrl && <img src={thumbnailUrl} alt="Live Mass" />}
-
             <div className="home-video-overlay">
               <button className="play-btn">
                 <Play size={22} fill="white" strokeWidth={0} />
@@ -249,66 +165,16 @@ function Dashboard() {
               title={stream?.title || "Live Mass"}
               allow="autoplay; encrypted-media"
               allowFullScreen
-            ></iframe>
+            />
           </div>
         )}
 
         <div className="post-actions">
-          <button
-            type="button"
-            className={liked ? "liked-btn" : ""}
-            onClick={handleLike}
-            disabled={!stream}
-          >
-            <ThumbsUp size={14} strokeWidth={2} />
-            {likeCount > 0
-              ? `${likeCount} ${likeCount === 1 ? "Like" : "Likes"}`
-              : "Like"}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setShowComments(!showComments)}
-            disabled={!stream}
-          >
-            <MessageCircle size={14} strokeWidth={2} />
-            Comment
-          </button>
-
           <button type="button" onClick={() => navigate("/live-mass")}>
             <Video size={14} strokeWidth={2} />
             Watch
           </button>
         </div>
-
-        {showComments && (
-          <div className="comments-box">
-            {comments.length === 0 ? (
-              <p className="no-comments">
-                No comments yet. Be the first to comment.
-              </p>
-            ) : (
-              comments.map((comment) => (
-                <div className="comment-item" key={comment._id || comment.id}>
-                  <strong>{comment.name || "Parishioner"}</strong>
-                  <p>{comment.text}</p>
-                </div>
-              ))
-            )}
-
-            <div className="comment-input-row">
-              <input
-                type="text"
-                placeholder="Write a comment..."
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-              />
-              <button type="button" onClick={handleAddComment}>
-                Send
-              </button>
-            </div>
-          </div>
-        )}
       </div>
 
       <BottomNav />
