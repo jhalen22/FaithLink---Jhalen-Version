@@ -383,3 +383,113 @@
   border-radius: 12px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.07);
 }
+
+/* ── Added for scheduled/countdown livestream flow ── */
+.helperText {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.statusCountdown { background: #fef3c7; color: #b45309; }
+.statusEnded { background: #fee2e2; color: #991b1b; }
+
+.countdownBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 5px 11px;
+  background: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.countdownBtn:hover { background: #d97706; }
+
+.streamMetaList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 10px 0 12px;
+}
+
+.streamMetaList p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.76rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.countdownText {
+  color: #b45309 !important;
+  font-weight: 700;
+}
+
+/* FORCE BLACK TEXT FIX */
+:global(.admin-content),
+:global(.admin-content *),
+:global(main),
+:global(main *),
+:global(input),
+:global(select),
+:global(textarea),
+:global(label) {
+  color: #111827 !important;
+}
+
+:global(input),
+:global(select),
+:global(textarea) {
+  background-color: #ffffff !important;
+  -webkit-text-fill-color: #111827 !important;
+}
+
+:global(input::placeholder),
+:global(textarea::placeholder) {
+  color: #6b7280 !important;
+  -webkit-text-fill-color: #6b7280 !important;
+  opacity: 1 !important;
+}
+
+:global(option) {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+}
+
+.previewScreen,
+.previewScreen *,
+.videoPlaceholder,
+.videoPlaceholder * {
+  color: #ffffff !important;
+}
+
+.statusBadge,
+.statusBadge * {
+  color: #111827 !important;
+}
+
+.previewVideoArea {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  overflow: hidden;
+  border-radius: 14px 14px 0 0;
+  background: #000;
+}
+
+.cameraPreview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: #000;
+}

@@ -4,6 +4,7 @@ dns.setServers(["8.8.8.8", "1.1.1.1"]);
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const path = require("path");
 
 const authRoutes = require("./routes/authRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
@@ -13,6 +14,7 @@ const profileRoutes = require("./routes/profileRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const streamRoutes = require("./routes/streamRoutes");
+const livekitRoutes = require("./routes/livekitRoutes");
 
 require("dotenv").config();
 
@@ -30,6 +32,9 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/livestream", streamRoutes);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/api/livekit", livekitRoutes);
+
 
 app.get("/", (req, res) => {
   res.send("Backend is working!");

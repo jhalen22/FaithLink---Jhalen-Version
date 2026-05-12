@@ -397,3 +397,59 @@
   justify-content: center;
   margin: 0 auto 16px;
 }
+/* ── Added for scheduled/countdown livestream flow ── */
+.lm-internal-live-placeholder {
+  height: 100%;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.78);
+  text-align: center;
+  padding: 20px;
+}
+
+.lm-internal-live-placeholder p {
+  margin: 0;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.lm-internal-live-placeholder small {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 12px;
+}
+
+.lm-countdown-card {
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.lm-countdown-label {
+  display: inline-flex;
+  margin-bottom: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #b45309;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.lm-countdown-time {
+  margin: 0 0 8px;
+  font-size: 38px;
+  line-height: 1;
+  color: #1e293b;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.lm-stream-subtitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 4px 0 0;
+}

@@ -10,6 +10,7 @@ function Dashboard() {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
 
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -30,13 +31,41 @@ function Dashboard() {
 
   const [stream, setStream]           = useState(null);
   const [showHomeVideo, setShowHomeVideo] = useState(false);
+  const [replayStreams, setReplayStreams] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/livestream")
-      .then((res) => setStream(res.data.stream || null))
-      .catch(() => setStream(null));
-  }, []);
+  axios
+    .get("http://localhost:5000/api/livestream")
+    .then((res) => setStream(res.data.stream || null))
+    .catch(() => setStream(null));
+
+  axios
+    .get("http://localhost:5000/api/livestream/replays")
+    .then((res) => setReplayStreams(res.data || []))
+    .catch(() => setReplayStreams([]));
+}, []);
+
+  useEffect(() => {
+  if (!stream || stream.status !== "live") return;
+
+  const interval = setInterval(async () => {
+    try {
+      await axios.put(
+        `http://localhost:5000/api/livestream/${stream._id}/view`
+      );
+
+      const res = await axios.get(
+        "http://localhost:5000/api/livestream"
+      );
+
+      setStream(res.data.stream || null);
+    } catch (error) {
+      console.error(error);
+    }
+  }, 10000);
+
+  return () => clearInterval(interval);
+}, [stream?._id, stream?.status]);
 
   const getYoutubeId = (url = "") => {
     try {
@@ -49,9 +78,20 @@ function Dashboard() {
     }
   };
 
+  const isLive = stream?.status === "live";
+  const isCountdown = stream?.status === "countdown";
+  const isScheduled = stream?.status === "scheduled" || stream?.status === "not-live";
   const videoId = getYoutubeId(stream?.url);
   const thumbnailUrl = videoId
     ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+    : "";
+
+  const liveStatusText = isLive
+    ? "LIVE NOW"
+    : isCountdown
+    ? "STARTING SOON"
+    : isScheduled
+    ? "SCHEDULED"
     : "";
 
   return (
@@ -133,41 +173,124 @@ function Dashboard() {
           <div>
             <h3>Holy Cross Parish</h3>
             <div className="live-meta-row">
-              {stream?.status === "live" && (
-                <span className="live-pill">LIVE NOW</span>
+              {liveStatusText && (
+                <span className="live-pill">{liveStatusText}</span>
               )}
             </div>
             <p className="mass-title">
               {stream?.title || "Sunday Holy Mass"}
             </p>
+            {isLive && (
+  <p
+    style={{
+      color: "#EF4444",
+      fontWeight: 600,
+      fontSize: "0.9rem",
+      marginTop: 4,
+    }}
+  >
+    👁️ {stream?.viewerCount || 0} watching now
+  </p>
+)}
           </div>
         </div>
 
-        <p className="post-text">Join us for Sunday Holy Mass.</p>
+        <p className="post-text">
+          {isLive
+            ? "Join the ongoing parish livestream."
+            : isCountdown
+            ? "The livestream is starting soon. Open Live Mass to wait for the broadcast."
+            : isScheduled
+            ? "A livestream has been scheduled. Check the Live Mass page for updates."
+            : "Join us for Sunday Holy Mass."}
+        </p>
 
         {!showHomeVideo ? (
           <div
             className="home-video-thumbnail"
-            onClick={() => setShowHomeVideo(true)}
+            onClick={() => navigate("/live-mass")}
           >
             {thumbnailUrl && <img src={thumbnailUrl} alt="Live Mass" />}
             <div className="home-video-overlay">
               <button className="play-btn">
                 <Play size={22} fill="white" strokeWidth={0} />
               </button>
-              <p>Tap to join live mass</p>
+              <p>{isLive ? "Tap to watch live" : isCountdown ? "Tap to wait for stream" : "Tap to view live mass"}</p>
             </div>
           </div>
         ) : (
           <div className="embedded-video-box">
-            <iframe
-              src={`${stream?.embedUrl}?autoplay=1`}
-              title={stream?.title || "Live Mass"}
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-            />
+            {stream?.embedUrl ? (
+              <iframe
+                src={`${stream?.embedUrl}?autoplay=1`}
+                title={stream?.title || "Live Mass"}
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+              />
+            ) : (
+              <div className="home-video-overlay" style={{ position: "static", minHeight: 180 }}>
+                <p>Livestream room is active. Open Live Mass to watch.</p>
+              </div>
+            )}
           </div>
         )}
+
+        {replayStreams.length > 0 && (
+  <div
+    style={{
+      marginTop: 18,
+      display: "flex",
+      flexDirection: "column",
+      gap: 14,
+    }}
+  >
+    <h3
+      style={{
+        fontSize: "1rem",
+        fontWeight: 700,
+      }}
+    >
+      Latest Replay
+    </h3>
+
+    <div
+      style={{
+        background: "#fff",
+        borderRadius: 18,
+        overflow: "hidden",
+        border: "1px solid #e2e8f0",
+      }}
+    >
+      <video
+        src={`http://localhost:5000${replayStreams[0].replayVideoUrl}`}
+        controls
+        width="100%"
+      />
+
+      <div style={{ padding: 14 }}>
+        <h4
+          style={{
+            fontWeight: 700,
+            marginBottom: 6,
+          }}
+        >
+          {replayStreams[0].replayTitle || replayStreams[0].title}
+        </h4>
+
+        <p
+          style={{
+            color: "#64748b",
+            fontSize: "0.9rem",
+            lineHeight: 1.5,
+          }}
+        >
+          {replayStreams[0].replayDescription ||
+            "Watch the latest parish replay."}
+        </p>
+      </div>
+    </div>
+  </div>
+)}
 
         <div className="post-actions">
           <button type="button" onClick={() => navigate("/live-mass")}>
