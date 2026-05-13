@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import styles from "../../styles/Admin/AdminPage.module.css";
 import modal from "../../styles/Admin/ManageBookings.module.css";
+import { useToast } from "../../context/ToastContext";
 
 // ── Mass schedule rules (mirrors backend validation) ──────────────────────
 const WEEKDAY_TIMES = ["06:00", "18:00"];
@@ -84,6 +85,7 @@ const smallSchedBadge = { ...scheduledBadge, fontSize: "0.68rem", padding: "2px 
 
 // ── Component ─────────────────────────────────────────────────────────────
 export default function ManageMassIntentions() {
+  const { showError } = useToast();
   const [intentions,    setIntentions]    = useState([]);
   const [loading,       setLoading]       = useState(true);
   const [fetchError,    setFetchError]    = useState("");
@@ -152,7 +154,7 @@ export default function ManageMassIntentions() {
       await fetchIntentions();
       setSelectedGroup(null);
     } catch {
-      alert("Failed to mark as done. Please try again.");
+      showError("Failed to mark as done. Please try again.");
     } finally {
       setMarking(false);
     }

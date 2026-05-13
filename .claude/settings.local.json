@@ -6,7 +6,10 @@
       "Bash(Get-ChildItem -Path . -Directory)",
       "Bash(Select-Object Name)",
       "Bash(grep -E \"\\\\.js$|^d\")",
-      "Bash(xargs grep -l \"axios.get.*streams\")"
+      "Bash(xargs grep -l \"axios.get.*streams\")",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\glory\\\\OneDrive\\\\Documents\\\\Python\\\\FaithLink---Jhalen-Version\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Sort-Object)"
     ]
   }
 }

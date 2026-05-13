@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "../../styles/Admin/AdminPage.module.css";
 import panel from "../../styles/Admin/ManageBookings.module.css";
+import { useToast } from "../../context/ToastContext";
 
 // ManageBookings.module.css contains all the slide-in panel styles (overlay,
 // panel, sections, detail rows, action buttons) — reused here so no duplicate CSS is needed.
@@ -48,6 +49,7 @@ const formatAmount = (amount) => {
 };
 
 export default function ManageDonations() {
+  const { showError } = useToast();
   const [donations, setDonations] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -91,7 +93,7 @@ export default function ManageDonations() {
           : prev
       );
     } catch {
-      alert("Action failed. Please try again.");
+      showError("Action failed. Please try again.");
     } finally {
       setActionLoading(false);
     }

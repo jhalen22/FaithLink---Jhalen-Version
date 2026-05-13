@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Bell, GraduationCap, CalendarDays, Clock3, MapPin, CheckCircle2 } from "lucide-react";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/Priest/PriestDashboard.css";
+import { useToast } from "../../context/ToastContext";
 
 // Static demo data — no backend model for seminars yet
 const SEMINARS = [
@@ -23,13 +24,14 @@ const SEMINARS = [
 
 function PriestSeminars() {
   const navigate = useNavigate();
+  const { showInfo } = useToast();
   const goBack = (fallback = "/priest-dashboard") => {
     if (window.history.length > 1) navigate(-1);
     else navigate(fallback);
   };
 
   const handleAcknowledge = (title) => {
-    alert(`Schedule acknowledged: ${title}`);
+    showInfo(`Schedule acknowledged: ${title}`);
   };
 
   return (

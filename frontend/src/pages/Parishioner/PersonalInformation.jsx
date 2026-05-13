@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ArrowLeft } from "lucide-react";
+import { useToast } from "../../context/ToastContext";
 
 function PersonalInformation() {
   const navigate = useNavigate();
+  const { showSuccess, showError } = useToast();
   const goBack = (fallback = "/dashboard") => {
     if (window.history.length > 1) navigate(-1);
     else navigate(fallback);
@@ -45,10 +47,10 @@ function PersonalInformation() {
       localStorage.setItem("fullName", res.data.user.fullName);
       localStorage.setItem("email", res.data.user.email);
 
-      alert("Profile updated successfully!");
+      showSuccess("Profile updated successfully!");
       navigate("/profile");
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to update profile");
+      showError(err.response?.data?.message || "Failed to update profile");
     }
   };
 

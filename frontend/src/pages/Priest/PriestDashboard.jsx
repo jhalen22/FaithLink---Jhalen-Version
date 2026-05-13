@@ -7,16 +7,18 @@ import {
 } from "lucide-react";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/Priest/PriestDashboard.css";
+import { useToast } from "../../context/ToastContext";
 
 const formatDate = (dateStr) => {
   if (!dateStr) return "—";
   return new Date(dateStr).toLocaleDateString("en-PH", {
-    month: "short", day: "numeric", year: "numeric",
+    month: "short", day: "numeridc", year: "numeric",
   });
 };
 
 function PriestDashboard() {
   const navigate = useNavigate();
+  const { showError, showInfo } = useToast();
   const [upcoming, setUpcoming]     = useState([]);
   const [confirming, setConfirming] = useState(null);
 
@@ -46,7 +48,7 @@ function PriestDashboard() {
       });
       await fetchUpcoming();
     } catch {
-      alert("Failed to confirm. Please try from the Bookings page.");
+      showError("Failed to confirm. Please try from the Bookings page.");
     } finally {
       setConfirming(null);
     }
@@ -63,7 +65,7 @@ function PriestDashboard() {
           <h2>FaithLink</h2>
         </div>
         <div className="top-actions">
-          <button className="top-icon-btn" onClick={() => alert("Search coming soon")}>
+          <button className="top-icon-btn" onClick={() => showInfo("Search coming soon")}>
             <Search size={18} strokeWidth={2} />
           </button>
           <button className="top-icon-btn" onClick={() => navigate("/priest-alerts")}>

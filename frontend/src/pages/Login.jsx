@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "../styles/Login.module.css";
+import { useToast } from "../context/ToastContext";
 
 function Login() {
   const navigate = useNavigate();
+  const { showSuccess, showError } = useToast();
   const [form, setForm] = useState({ email: "", password: "" });
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +28,7 @@ function Login() {
       localStorage.setItem("email", res.data.user.email);
       localStorage.setItem("role", res.data.user.role);
 
-      alert("Login successful!");
+      showSuccess("Login successful!");
 
       if (res.data.user.role === "priest") {
         navigate("/priest-dashboard");
@@ -36,7 +38,7 @@ function Login() {
         navigate("/dashboard");
       }
     } catch (err) {
-      alert(err.response?.data?.message || "Invalid credentials");
+      showError(err.response?.data?.message || "Invalid credentials");
     }
   };
 
