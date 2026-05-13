@@ -369,4 +369,17 @@
   width: 100%;
 }
 
+.qr-display {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 24px;
+  margin: 20px auto;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
 .submit-donation-btn:hover { opacity: 0.9; }

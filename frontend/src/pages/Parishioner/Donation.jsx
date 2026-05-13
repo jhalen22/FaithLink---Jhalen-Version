@@ -200,12 +200,18 @@ function Donation() {
             <h4>Payment Information</h4>
 
             <div className="qr-display">
-              <QRCodeSVG
-                value={`${method} Payment\nFaithLink Parish\nNumber: ${method === "GCash" ? "09123456789" : "09187654321"}\nAmount: PHP ${form.amount || "0"}\nPurpose: ${finalPurpose || "Donation"}`}
-                size={140}
-                style={{ display: "block" }}
-              />
-            </div>
+  <img
+    src="/images/instapay-qr.png"
+    alt="Instapay QR"
+    style={{
+      width: "100%",
+      maxWidth: "320px",
+      aspectRatio: "1 / 1",
+      objectFit: "contain",
+      display: "block",
+    }}
+  />
+</div>
             <p className="scan-text">Scan to donate via {method}</p>
 
             <div className="wallet-row">

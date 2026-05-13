@@ -168,30 +168,35 @@ function MassIntentions() {
 
       {/* Floating add button — fixed so it stays visible while the list scrolls */}
       <button
-        onClick={() => navigate("/booking-form", { state: { sacramentType: "Mass Intentions" } })}
-        style={{
-          position: "fixed",
-          bottom: 24,
-          left: 20,
-          zIndex: 100,
-          background: "linear-gradient(135deg, #5B8DEF, #2F5FBF)",
-          color: "#ffffff",
-          border: "none",
-          borderRadius: 50,
-          padding: "12px 20px",
-          fontSize: 14,
-          fontWeight: 600,
-          cursor: "pointer",
-          boxShadow: "0 4px 16px rgba(91, 141, 239, 0.45)",
-          display: "flex",
-          alignItems: "center",
-          gap: 6,
-          fontFamily: "inherit",
-          whiteSpace: "nowrap",
-        }}
-      >
-        + Add Intention
-      </button>
+  onClick={() =>
+    navigate("/booking-form", {
+      state: { sacramentType: "Mass Intentions" },
+    })
+  }
+  style={{
+  position: "fixed",
+  bottom: 24,
+  left: "50%",
+  transform: "translateX(-50%)",
+  zIndex: 100,
+  background: "linear-gradient(135deg, #5B8DEF, #2F5FBF)",
+  color: "#ffffff",
+  border: "none",
+  borderRadius: 50,
+  padding: "12px 20px",
+  fontSize: 14,
+  fontWeight: 600,
+  cursor: "pointer",
+  boxShadow: "0 4px 16px rgba(91, 141, 239, 0.45)",
+  display: "flex",
+  alignItems: "center",
+  gap: 6,
+  fontFamily: "inherit",
+  whiteSpace: "nowrap",
+}}
+>
+  + Add Intention
+</button>
     </div>
   );
 }
