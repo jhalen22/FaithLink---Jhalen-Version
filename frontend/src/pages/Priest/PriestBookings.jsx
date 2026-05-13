@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/Priest/PriestDashboard.css";
+import { useToast } from "../../context/ToastContext";
 
 const formatDate = (dateStr) => {
   if (!dateStr) return "—";
@@ -17,6 +18,7 @@ const formatDate = (dateStr) => {
 
 function PriestBookings() {
   const navigate = useNavigate();
+  const { showError } = useToast();
   const goBack = (fallback = "/priest-dashboard") => {
     if (window.history.length > 1) navigate(-1);
     else navigate(fallback);
@@ -53,7 +55,7 @@ function PriestBookings() {
       );
       await fetchBookings();
     } catch {
-      alert("Failed to confirm availability. Please try again.");
+      showError("Failed to confirm availability. Please try again.");
     } finally {
       setConfirming(null);
     }

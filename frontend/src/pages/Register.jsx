@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "../styles/Register.module.css";
+import { useToast } from "../context/ToastContext";
 
 function Register() {
   const navigate = useNavigate();
+  const { showSuccess, showError, showWarning } = useToast();
 
   const [form, setForm] = useState({
     firstName: "",
@@ -29,11 +31,11 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match.");
+      showError("Passwords do not match.");
       return;
     }
     if (!termsAccepted) {
-      alert("Please accept the Terms of Service and Privacy Policy.");
+      showWarning("Please accept the Terms of Service and Privacy Policy.");
       return;
     }
     try {
@@ -42,10 +44,10 @@ function Register() {
         email: form.email,
         password: form.password,
       });
-      alert("Registered successfully!");
+      showSuccess("Registered successfully!");
       navigate("/");
     } catch (err) {
-      alert(err.response?.data?.message || "Error registering");
+      showError(err.response?.data?.message || "Error registering");
     }
   };
 

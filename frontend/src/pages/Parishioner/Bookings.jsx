@@ -5,6 +5,7 @@ import { Plus, Search, CalendarX, X } from "lucide-react";
 import BottomNav from "../../components/BottomNav";
 import NotificationBell from "../../components/NotificationBell";
 import "../../styles/Parishioner/Bookings.css";
+import { useToast } from "../../context/ToastContext";
 
 const getFileUrl = (fileName) => {
   return `http://localhost:5000/uploads/${encodeURIComponent(fileName)}`;
@@ -22,6 +23,7 @@ const getReviewForFile = (booking, fileName) => {
 
 function Bookings() {
   const navigate = useNavigate();
+  const { showSuccess, showError, showWarning } = useToast();
 
   const [bookings, setBookings] = useState([]);
   const [filter, setFilter] = useState("all");
@@ -152,7 +154,7 @@ function Bookings() {
     if (!uploadBooking) return;
 
     if (uploadFiles.length === 0) {
-      alert("Please choose at least one file.");
+      showWarning("Please choose at least one file.");
       return;
     }
 
@@ -174,12 +176,12 @@ function Bookings() {
         }
       );
 
-      alert("Document uploaded successfully!");
+      showSuccess("Document uploaded successfully!");
       setUploadFiles([]);
       setUploadBooking(null);
       await fetchBookings();
     } catch (err) {
-      alert(err.response?.data?.message || "Upload failed.");
+      showError(err.response?.data?.message || "Upload failed.");
     } finally {
       setUploading(false);
     }

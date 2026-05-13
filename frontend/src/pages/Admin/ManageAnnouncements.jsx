@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "../../styles/Admin/AdminPage.module.css";
+import { useToast } from "../../context/ToastContext";
+import { useConfirm } from "../../context/ConfirmContext";
 
 // Status → badge CSS class (reuses existing AdminPage.module.css badge classes)
 const BADGE = {
@@ -27,6 +29,8 @@ const formatDate = (dateStr) => {
 };
 
 export default function ManageAnnouncements() {
+  const { showError } = useToast();
+  const confirm = useConfirm();
   const [events, setEvents]           = useState([]);
   const [loading, setLoading]         = useState(true);
   const [fetchError, setFetchError]   = useState("");
@@ -101,14 +105,20 @@ export default function ManageAnnouncements() {
       await fetchEvents();
       cancelForm();
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to save event.");
+      showError(err.response?.data?.message || "Failed to save event.");
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this event/announcement?")) return;
+    const ok = await confirm({
+      title: "Delete Announcement",
+      message: "Are you sure you want to delete this event/announcement?",
+      confirmLabel: "Delete",
+      variant: "danger",
+    });
+    if (!ok) return;
     try {
       await axios.delete(
         `http://localhost:5000/api/events/${id}`,
@@ -116,7 +126,7 @@ export default function ManageAnnouncements() {
       );
       await fetchEvents();
     } catch {
-      alert("Failed to delete event.");
+      showError("Failed to delete event.");
     }
   };
 

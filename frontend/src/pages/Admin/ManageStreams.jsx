@@ -1,6 +1,8 @@
 import LiveKitBroadcast from "../../components/LiveKitBroadcast";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import { useToast } from "../../context/ToastContext";
+import { useConfirm } from "../../context/ConfirmContext";
 import {
   Radio,
   Play,
@@ -68,6 +70,8 @@ function getStatusClass(status) {
 }
 
 export default function ManageStreams() {
+  const { showSuccess, showError, showWarning } = useToast();
+  const confirm = useConfirm();
   const [replayVideo, setReplayVideo] = useState(null);
   const [uploadingReplay, setUploadingReplay] = useState(false);
   const [stream, setStream] = useState(null);
@@ -230,7 +234,7 @@ export default function ManageStreams() {
       await fetchStream();
       cancelForm();
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to save stream.");
+      showError(err.response?.data?.message || "Failed to save stream.");
     } finally {
       setSaving(false);
     }
@@ -247,7 +251,7 @@ export default function ManageStreams() {
       await fetchStream();
     } catch (error) {
       console.error(error);
-      alert("Failed to start countdown.");
+      showError("Failed to start countdown.");
     }
   };
 
@@ -269,7 +273,7 @@ export default function ManageStreams() {
     } catch (error) {
       console.error(error);
       setBroadcasting(false);
-      alert("Failed to start stream.");
+      showError("Failed to start stream.");
     }
   };
 
@@ -284,12 +288,18 @@ export default function ManageStreams() {
     setCameraActive(true);
   } catch (error) {
     console.error(error);
-    alert("Failed to access camera/microphone.");
+    showError("Failed to access camera/microphone.");
   }
 };
 
   const endStream = async (id) => {
-    if (!window.confirm("End this livestream now?")) return;
+    const ok = await confirm({
+      title: "End Livestream",
+      message: "Are you sure you want to end this livestream now?",
+      confirmLabel: "End Stream",
+      variant: "warning",
+    });
+    if (!ok) return;
 
     try {
       await axios.patch(
@@ -303,12 +313,18 @@ export default function ManageStreams() {
       await fetchHistory();
     } catch (error) {
       console.error(error);
-      alert("Failed to end stream.");
+      showError("Failed to end stream.");
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this stream? This cannot be undone.")) return;
+    const ok = await confirm({
+      title: "Delete Stream",
+      message: "Delete this stream? This cannot be undone.",
+      confirmLabel: "Delete",
+      variant: "danger",
+    });
+    if (!ok) return;
 
     try {
       await axios.delete(`${API}/${id}`, {
@@ -319,31 +335,38 @@ export default function ManageStreams() {
       setBroadcasting(false);
     } catch (error) {
       console.error(error);
-      alert("Failed to delete stream.");
+      showError("Failed to delete stream.");
     }
   };
 
   const deleteReplay = async (id) => {
-  if (!window.confirm("Delete this replay? This will remove it from parishioner views too.")) return;
+  const ok = await confirm({
+    title: "Delete Replay",
+    message: "Delete this replay? This will remove it from parishioner views too.",
+    confirmLabel: "Delete",
+    variant: "danger",
+  });
+  if (!ok) return;
 
   try {
     await axios.delete(`${API}/${id}/replay`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    alert("Replay deleted successfully!");
+    showSuccess("Replay deleted successfully!");
 
     await fetchStream();
     await fetchHistory();
   } catch (error) {
     console.error(error);
-    alert("Failed to delete replay.");
+    showError("Failed to delete replay.");
   }
 };
 
   const uploadReplay = async () => {
   if (!replayVideo) {
-  return alert("Please select a video first.");
+  showWarning("Please select a video first.");
+  return;
 }
 
   try {
@@ -363,7 +386,7 @@ export default function ManageStreams() {
       },
     });
 
-    alert("Replay uploaded successfully!");
+    showSuccess("Replay uploaded successfully!");
 
     await fetchStream();
     await fetchHistory();
@@ -374,7 +397,7 @@ export default function ManageStreams() {
     setShowUploadForm(false);
   } catch (error) {
     console.error(error);
-    alert("Failed to upload replay.");
+    showError("Failed to upload replay.");
   } finally {
     setUploadingReplay(false);
   }
@@ -407,7 +430,7 @@ const saveReplayChanges = async () => {
       }
     );
 
-    alert("Replay changes saved successfully!");
+    showSuccess("Replay changes saved successfully!");
     await fetchHistory();
     setShowReplayEditor(false);
     setEditingReplay(null);
@@ -415,7 +438,7 @@ const saveReplayChanges = async () => {
     setNewReplayVideo(null);
   } catch (error) {
     console.error(error);
-    alert("Failed to update replay.");
+    showError("Failed to update replay.");
   }
 };
 

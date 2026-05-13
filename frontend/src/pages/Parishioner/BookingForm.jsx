@@ -4,10 +4,12 @@ import axios from "axios";
 import { ArrowLeft, Bell } from "lucide-react";
 import "../../styles/Parishioner/Bookings.css";
 import NotificationBell from "../../components/NotificationBell";
+import { useToast } from "../../context/ToastContext";
 
 function BookingForm() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { showSuccess, showError, showWarning } = useToast();
   const goBack = (fallback = "/dashboard") => {
     if (window.history.length > 1) navigate(-1);
     else navigate(fallback);
@@ -177,20 +179,20 @@ function BookingForm() {
 
     if (sacramentType === "Mass Intentions") {
       if (!form.preferredDate) {
-        alert("Please select a date for your Mass Intention.");
+        showWarning("Please select a date for your Mass Intention.");
         return;
       }
       if (form.preferredDate < getTodayDateString()) {
-        alert("The selected date is in the past. Please choose today or a future date.");
+        showWarning("The selected date is in the past. Please choose today or a future date.");
         return;
       }
       if (!form.preferredTime) {
-        alert("Please select a Preferred Mass Time.");
+        showWarning("Please select a Preferred Mass Time.");
         return;
       }
       const allowed = getMassTimesForDate(form.preferredDate);
       if (!allowed.includes(form.preferredTime)) {
-        alert("The selected Mass time is not valid for the chosen date. Please select an allowed time.");
+        showWarning("The selected Mass time is not valid for the chosen date. Please select an allowed time.");
         return;
       }
     }
@@ -216,10 +218,10 @@ function BookingForm() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      alert("Booking submitted successfully!");
+      showSuccess("Booking submitted successfully!");
       navigate(sacramentType === "Mass Intentions" ? "/mass-intentions" : "/bookings");
     } catch (err) {
-      alert(err.response?.data?.message || "Booking failed");
+      showError(err.response?.data?.message || "Booking failed");
     }
   };
 

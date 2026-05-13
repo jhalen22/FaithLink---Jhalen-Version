@@ -4,10 +4,11 @@ import axios from "axios";
 import { QRCodeSVG } from "qrcode.react";
 import { ArrowLeft } from "lucide-react";
 import "../../styles/Parishioner/Donation.css";
-
+import { useToast } from "../../context/ToastContext";
 
 function Donation() {
   const navigate = useNavigate();
+  const { showSuccess, showError } = useToast();
   const goBack = (fallback = "/dashboard") => {
     if (window.history.length > 1) navigate(-1);
     else navigate(fallback);
@@ -63,11 +64,11 @@ function Donation() {
       );
 
       console.log(res.data);
-      alert("Donation submitted for admin verification.");
+      showSuccess("Donation submitted for admin verification.");
       navigate("/profile");
     } catch (err) {
       console.log("Donation error:", err.response?.data || err.message);
-      alert(err.response?.data?.message || "Failed to submit donation");
+      showError(err.response?.data?.message || "Failed to submit donation");
     }
   };
 

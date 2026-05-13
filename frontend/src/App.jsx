@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import "./styles/App.css";
+import { ToastProvider } from "./context/ToastContext";
+import { ConfirmProvider } from "./context/ConfirmContext";
 
 /* ── Shared admin shell ── */
 import AdminLayout from "./components/AdminLayout";
@@ -55,6 +57,8 @@ function App() {
 }, []);
 
   return (
+    <ToastProvider>
+    <ConfirmProvider>
     <BrowserRouter>
       <Routes>
         {/* ── Auth ── */}
@@ -99,6 +103,8 @@ function App() {
         <Route path="/priest-alerts"    element={<PriestAlerts />}    />
       </Routes>
     </BrowserRouter>
+    </ConfirmProvider>
+    </ToastProvider>
   );
 }
 
