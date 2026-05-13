@@ -134,7 +134,7 @@ function MassIntentions() {
                         whiteSpace: "nowrap",
                         flexShrink: 0,
                       }}>
-                        ● New
+                        Unread Update
                       </span>
                     )}
                   </h3>
@@ -155,6 +155,19 @@ function MassIntentions() {
                   <p>
                     <strong>Preferred Mass Time:</strong> {formatTime(b.preferredTime)}
                   </p>
+                  {b.assignedPriest && (
+  <p>
+    <strong>Assigned Priest:</strong>{" "}
+    {b.assignedPriest.fullName || "Assigned"}
+  </p>
+)}
+
+{b.priestConfirmationStatus && (
+  <p>
+    <strong>Priest Status:</strong>{" "}
+    {b.priestConfirmationStatus}
+  </p>
+)}
                   {b.message && (
                     <p><strong>Notes:</strong> {b.message}</p>
                   )}

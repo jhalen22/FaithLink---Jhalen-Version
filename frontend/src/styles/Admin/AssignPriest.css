@@ -1,0 +1,405 @@
+.assign-priest-page {
+  padding: 36px;
+  min-height: 100vh;
+  background: #f5f8fc;
+  color: #10213f;
+}
+
+.assign-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+
+.assign-hero h1 {
+  font-size: 34px;
+  font-weight: 800;
+  margin: 0 0 8px;
+  color: #10213f;
+}
+
+.assign-hero p {
+  margin: 0;
+  color: #6d7d96;
+  font-size: 16px;
+}
+
+.church-illustration {
+  width: 230px;
+  height: 110px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #e9efff, #f6f9ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9fb4ff;
+  font-size: 56px;
+  box-shadow: inset 0 0 0 1px rgba(54, 90, 180, 0.06);
+}
+
+.assign-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.assign-stat-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border: 1px solid #e3e9f4;
+  box-shadow: 0 8px 24px rgba(16, 33, 63, 0.06);
+}
+
+.stat-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.assign-stat-card.purple .stat-icon {
+  background: #efe5ff;
+  color: #7c3aed;
+}
+
+.assign-stat-card.green .stat-icon {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.assign-stat-card.yellow .stat-icon {
+  background: #fef3c7;
+  color: #f59e0b;
+}
+
+.assign-stat-card.blue .stat-icon {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.assign-stat-card p {
+  margin: 0 0 4px;
+  color: #52627a;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.assign-stat-card h2 {
+  margin: 0;
+  font-size: 30px;
+  color: #10213f;
+}
+
+.assign-stat-card span {
+  color: #7a8aa3;
+  font-size: 13px;
+}
+
+.assign-table-card {
+  background: #fff;
+  border-radius: 20px;
+  border: 1px solid #e3e9f4;
+  box-shadow: 0 10px 30px rgba(16, 33, 63, 0.07);
+  overflow: hidden;
+}
+
+.assign-table-header {
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.assign-table-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 4px;
+  font-size: 22px;
+  color: #10213f;
+}
+
+.assign-table-header p {
+  margin: 0;
+  color: #6d7d96;
+}
+
+.assign-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.assign-search {
+  height: 44px;
+  width: 320px;
+  border: 1px solid #d9e2f1;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  background: #fff;
+  color: #6d7d96;
+}
+
+.assign-search input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  color: #10213f;
+}
+
+.filter-btn {
+  height: 44px;
+  border: 1px solid #d9e2f1;
+  background: #fff;
+  color: #52627a;
+  border-radius: 12px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.assign-table-wrap {
+  padding: 0 22px 18px;
+  overflow-x: auto;
+}
+
+.assign-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #e3e9f4;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.assign-table th {
+  background: #f8fafc;
+  color: #52627a;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: left;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e3e9f4;
+}
+
+.assign-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #eef2f7;
+  vertical-align: middle;
+}
+
+.assign-table tr:last-child td {
+  border-bottom: none;
+}
+
+.parishioner-cell,
+.sacrament-cell,
+.date-cell p,
+.date-cell span,
+.assigned-priest {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.avatar-0 {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.avatar-1 {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.avatar-2 {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.avatar-3 {
+  background: #fce7f3;
+  color: #db2777;
+}
+
+.avatar-4 {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.parishioner-cell strong,
+.sacrament-cell strong {
+  display: block;
+  font-size: 14px;
+  color: #10213f;
+}
+
+.parishioner-cell span,
+.sacrament-cell span,
+.date-cell span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: #6d7d96;
+  margin-top: 3px;
+}
+
+.sacrament-cell svg,
+.date-cell svg,
+.assigned-priest svg {
+  color: #52627a;
+}
+
+.date-cell {
+  color: #10213f;
+}
+
+.date-cell p {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.status-pill {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.status-pill.approved {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.priest-select {
+  width: 220px;
+  height: 42px;
+  border: 1px solid #d9e2f1;
+  border-radius: 10px;
+  padding: 0 12px;
+  outline: none;
+  color: #10213f;
+  background: #fff;
+}
+
+.assigned-priest {
+  color: #10213f;
+  font-weight: 700;
+}
+
+.assign-btn {
+  height: 42px;
+  border: none;
+  border-radius: 10px;
+  background: #3b63f4;
+  color: #fff;
+  padding: 0 16px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(59, 99, 244, 0.24);
+}
+
+.assign-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.empty-row {
+  text-align: center;
+  padding: 34px !important;
+  color: #6d7d96;
+}
+
+.assign-footer {
+  padding: 0 22px 22px;
+  color: #6d7d96;
+  font-size: 14px;
+}
+
+@media (max-width: 1100px) {
+  .assign-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .assign-table-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .assign-tools,
+  .assign-search {
+    width: 100%;
+  }
+}
+
+@media (max-width: 700px) {
+  .assign-priest-page {
+    padding: 20px;
+  }
+
+  .assign-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .church-illustration {
+    width: 100%;
+  }
+
+  .assign-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.status-pill.unassigned {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.status-pill.pending {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.status-pill.accepted {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status-pill.rejected {
+  background: #fee2e2;
+  color: #b91c1c;
+}

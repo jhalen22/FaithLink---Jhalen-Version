@@ -15,6 +15,7 @@ const notificationRoutes = require("./routes/notificationRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const streamRoutes = require("./routes/streamRoutes");
 const livekitRoutes = require("./routes/livekitRoutes");
+const priestRoutes = require("./routes/priestRoutes");
 
 require("dotenv").config();
 
@@ -34,6 +35,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/livestream", streamRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api/livekit", livekitRoutes);
+app.use("/api/priests", priestRoutes);
 
 
 app.get("/", (req, res) => {

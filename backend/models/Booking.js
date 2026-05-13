@@ -106,9 +106,18 @@ const bookingSchema = new mongoose.Schema(
     },
 
     priestConfirmationStatus: {
-      type: String,
-      enum: ["pending", "confirmed"],
-      default: "pending",
+    type: String,
+    enum: ["unassigned", "pending", "accepted", "rejected"],
+    default: "unassigned",
+    },
+
+    priestRejectedAt: {
+    type: Date,
+    },
+
+    priestResponseRemarks: {
+    type: String,
+    default: "",
     },
 
     priestConfirmedAt: {

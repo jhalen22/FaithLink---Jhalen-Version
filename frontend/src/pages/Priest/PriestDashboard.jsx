@@ -12,7 +12,7 @@ import { useToast } from "../../context/ToastContext";
 const formatDate = (dateStr) => {
   if (!dateStr) return "—";
   return new Date(dateStr).toLocaleDateString("en-PH", {
-    month: "short", day: "numeridc", year: "numeric",
+    month: "short", day: "numeric", year: "numeric",
   });
 };
 
@@ -34,7 +34,7 @@ function PriestDashboard() {
       const res = await axios.get("http://localhost:5000/api/bookings/priest/approved", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setUpcoming((res.data.bookings || []).slice(0, 3));
+      setUpcoming(res.data.bookings || []);
     } catch { /* silently fail */ }
   };
 
@@ -43,9 +43,11 @@ function PriestDashboard() {
   const confirmAvailability = async (id) => {
     setConfirming(id);
     try {
-      await axios.put(`http://localhost:5000/api/bookings/${id}/priest-confirm`, {}, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.put(
+  `http://localhost:5000/api/bookings/${id}/priest-accept`,
+  {},
+  { headers: { Authorization: `Bearer ${token}` } }
+);
       await fetchUpcoming();
     } catch {
       showError("Failed to confirm. Please try from the Bookings page.");
@@ -53,6 +55,22 @@ function PriestDashboard() {
       setConfirming(null);
     }
   };
+
+  const rejectBooking = async (id) => {
+  try {
+    await axios.put(
+      `http://localhost:5000/api/bookings/${id}/priest-reject`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    await fetchUpcoming();
+  } catch {
+    showError("Failed to reject booking.");
+  }
+};
 
   return (
     <div className="mobile-dashboard">
@@ -77,30 +95,9 @@ function PriestDashboard() {
       {/* ── Hero welcome (gradient + gold accent line) ── */}
       <div className="priest-hero">
         <h2>Welcome, {fullName}</h2>
-        <p>Manage your assigned schedules, seminars, and bookings.</p>
+        <p>Manage your assigned schedules and bookings.</p>
       </div>
 
-      {/* ── Quick actions (elevated card with gold top stripe) ── */}
-      <div className="priest-actions-wrap">
-        <div className="quick-actions">
-          <div className="action-item" onClick={() => navigate("/priest-schedules")}>
-            <div className="action-icon"><Clock size={24} strokeWidth={1.8} /></div>
-            <p>Schedules</p>
-          </div>
-          <div className="action-item" onClick={() => navigate("/priest-seminars")}>
-            <div className="action-icon"><GraduationCap size={24} strokeWidth={1.8} /></div>
-            <p>Seminars</p>
-          </div>
-          <div className="action-item" onClick={() => navigate("/priest-bookings")}>
-            <div className="action-icon"><BookOpen size={24} strokeWidth={1.8} /></div>
-            <p>Bookings</p>
-          </div>
-          <div className="action-item" onClick={() => navigate("/priest-alerts")}>
-            <div className="action-icon"><Bell size={24} strokeWidth={1.8} /></div>
-            <p>Updates</p>
-          </div>
-        </div>
-      </div>
 
       {/* ── Upcoming bookings (gold-accented cards) ── */}
       <div
@@ -133,20 +130,39 @@ function PriestDashboard() {
                 <p><Clock3 size={14} strokeWidth={2} />{b.preferredTime}</p>
                 {b.address && <p><MapPin size={14} strokeWidth={2} />{b.address}</p>}
 
-                {b.priestConfirmationStatus === "confirmed" ? (
-                  <span className="status-badge status-badge-confirmed">
+                {b.priestConfirmationStatus === "accepted" ? (
+                  <span className="status-badge status-badge-accepted">
                     <CheckCircle2 size={12} strokeWidth={2.5} />
-                    Confirmed
+                    Accepted
                   </span>
                 ) : (
-                  <button
-                    className="priest-confirm-btn"
-                    disabled={confirming === b._id}
-                    style={{ opacity: confirming === b._id ? 0.6 : 1 }}
-                    onClick={() => confirmAvailability(b._id)}
-                  >
-                    {confirming === b._id ? "Confirming…" : "Confirm Availability"}
-                  </button>
+                  <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+  <button
+    className="priest-confirm-btn"
+    disabled={confirming === b._id}
+    style={{ opacity: confirming === b._id ? 0.6 : 1, flex: 1 }}
+    onClick={() => confirmAvailability(b._id)}
+  >
+    {confirming === b._id ? "Confirming…" : "Accept"}
+  </button>
+
+  <button
+    className="priest-reject-btn"
+    style={{
+      flex: 1,
+      background: "#ef4444",
+      color: "#fff",
+      border: "none",
+      borderRadius: "12px",
+      fontWeight: "600",
+      padding: "12px",
+      cursor: "pointer",
+    }}
+    onClick={() => rejectBooking(b._id)}
+  >
+    Reject
+  </button>
+</div>
                 )}
               </div>
             ))

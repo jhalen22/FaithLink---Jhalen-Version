@@ -120,12 +120,13 @@ function Bookings() {
         status === "completed",
     },
     {
-      label: "Scheduled",
-      done:
-        Boolean(booking.assignedSchedule) ||
-        status === "scheduled" ||
-        status === "completed",
-    },
+  label: "Scheduled",
+  done:
+    Boolean(booking.assignedPriest) ||
+    Boolean(booking.assignedSchedule) ||
+    status === "scheduled" ||
+    status === "completed",
+},
     {
       label: "Completed",
       done: status === "completed",
@@ -312,7 +313,21 @@ function Bookings() {
                 <span className="status">{booking.status}</span>
               </p>
 
-              {booking.priestConfirmationStatus === "confirmed" && (
+              {booking.assignedPriest && (
+  <p>
+    <strong>Assigned Priest:</strong>{" "}
+    {booking.assignedPriest.fullName || "Assigned"}
+  </p>
+)}
+
+{booking.assignedPriest && (
+  <p>
+    <strong>Priest Status:</strong>{" "}
+    {booking.priestConfirmationStatus || "pending"}
+  </p>
+)}
+
+              {booking.priestConfirmationStatus === "accepted" && (
                 <p className="booking-confirmed-text">
                   ✓ Priest availability confirmed
                 </p>
@@ -470,12 +485,34 @@ function Bookings() {
               </div>
 
               <div>
-                <strong>Current Status</strong>
-                <span className={`booking-status-text ${trackingBooking.status}`}>
-                  {trackingBooking.status}
-                </span>
-              </div>
-            </div>
+  <strong>Current Status</strong>
+  <span className={`booking-status-text ${trackingBooking.status}`}>
+    {trackingBooking.status}
+  </span>
+</div>
+
+{trackingBooking.assignedPriest && (
+  <div>
+    <strong>Assigned Priest</strong>
+    <span>{trackingBooking.assignedPriest.fullName || "Assigned"}</span>
+  </div>
+)}
+
+{trackingBooking.assignedPriest && (
+  <div>
+    <strong>Priest Status</strong>
+    <span
+      className={`booking-status-text ${
+        trackingBooking.priestConfirmationStatus || "pending"
+      }`}
+    >
+      {trackingBooking.priestConfirmationStatus || "pending"}
+    </span>
+  </div>
+
+  
+)}
+</div>
 
             <div className="booking-modal-docs">
               <h4>Uploaded Requirements</h4>

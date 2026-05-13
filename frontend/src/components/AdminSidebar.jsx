@@ -68,6 +68,7 @@ const ChurchLogo = () => (
 const NAV_ITEMS = [
   { label: "Dashboard",          path: "/admin/dashboard",         icon: <DashboardIcon /> },
   { label: "Sacrament Bookings", path: "/admin/bookings",          icon: <CalendarIcon /> },
+  { label: "Assign Priest",      path: "/admin/assign-priest",     icon: <UsersIcon /> },
   { label: "Mass Intentions",    path: "/admin/mass-intentions",   icon: <CrossIcon /> },
   { label: "Donations",          path: "/admin/donations",         icon: <PesoIcon /> },
   { label: "Announcements",      path: "/admin/announcements",     icon: <MegaphoneIcon /> },

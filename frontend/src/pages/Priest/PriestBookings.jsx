@@ -49,10 +49,10 @@ function PriestBookings() {
     setConfirming(id);
     try {
       await axios.put(
-        `http://localhost:5000/api/bookings/${id}/priest-confirm`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+  `http://localhost:5000/api/bookings/${id}/priest-accept`,
+  {},
+  { headers: { Authorization: `Bearer ${token}` } }
+);
       await fetchBookings();
     } catch {
       showError("Failed to confirm availability. Please try again.");
@@ -60,6 +60,20 @@ function PriestBookings() {
       setConfirming(null);
     }
   };
+
+  const rejectBooking = async (id) => {
+  try {
+    await axios.put(
+      `http://localhost:5000/api/bookings/${id}/priest-reject`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    await fetchBookings();
+  } catch {
+    showError("Failed to reject booking.");
+  }
+};
 
   return (
     <div className="mobile-dashboard">
@@ -114,10 +128,10 @@ function PriestBookings() {
                 <p><Clock3 size={14} strokeWidth={2} />{b.preferredTime}</p>
                 {b.address && <p><MapPin size={14} strokeWidth={2} />{b.address}</p>}
 
-                {b.priestConfirmationStatus === "confirmed" ? (
-                  <span className="status-badge status-badge-confirmed">
+                {b.priestConfirmationStatus === "accepted" ? (
+                  <span className="status-badge status-badge-accepted">
                     <CheckCircle2 size={12} strokeWidth={2.5} />
-                    Availability Confirmed
+                    Availability Accepted
                   </span>
                 ) : (
                   <>
@@ -125,13 +139,33 @@ function PriestBookings() {
                       <Clock size={12} strokeWidth={2.5} />
                       Awaiting Confirmation
                     </span>
-                    <button
-                      disabled={confirming === b._id}
-                      style={{ opacity: confirming === b._id ? 0.6 : 1, cursor: confirming === b._id ? "not-allowed" : "pointer" }}
-                      onClick={() => confirmAvailability(b._id)}
-                    >
-                      {confirming === b._id ? "Confirming…" : "Confirm Availability"}
-                    </button>
+                    <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+  <button
+    className="priest-confirm-btn"
+    disabled={confirming === b._id}
+    style={{ opacity: confirming === b._id ? 0.6 : 1, flex: 1 }}
+    onClick={() => confirmAvailability(b._id)}
+  >
+    {confirming === b._id ? "Confirming…" : "Accept"}
+  </button>
+
+  <button
+    className="priest-reject-btn"
+    style={{
+      flex: 1,
+      background: "#ef4444",
+      color: "#fff",
+      border: "none",
+      borderRadius: "12px",
+      fontWeight: "600",
+      padding: "12px",
+      cursor: "pointer",
+    }}
+    onClick={() => rejectBooking(b._id)}
+  >
+    Reject
+  </button>
+</div>
                   </>
                 )}
               </div>

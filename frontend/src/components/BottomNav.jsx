@@ -14,7 +14,6 @@ const PARISHIONER_TABS = [
 const PRIEST_TABS = [
   { icon: Home, label: "Home", path: "/priest-dashboard" },
   { icon: Clock, label: "Schedules", path: "/priest-schedules" },
-  { icon: GraduationCap, label: "Seminars", path: "/priest-seminars" },
   { icon: Bell, label: "Alerts", path: "/priest-alerts" },
   { icon: User, label: "Profile", path: "/profile" },
 ];

@@ -33,7 +33,11 @@ function PriestSchedules() {
           "http://localhost:5000/api/bookings/priest/approved",
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        setBookings(res.data.bookings || []);
+        setBookings(
+  (res.data.bookings || []).filter(
+    (b) => b.priestConfirmationStatus === "accepted"
+  )
+);
       } catch {
         // Show empty state on error
       } finally {
@@ -94,10 +98,10 @@ function PriestSchedules() {
                 <p><Clock3 size={14} strokeWidth={2} />{b.preferredTime}</p>
                 {b.address && <p><MapPin size={14} strokeWidth={2} />{b.address}</p>}
 
-                {b.priestConfirmationStatus === "confirmed" ? (
+                {b.priestConfirmationStatus === "accepted" ? (
                   <span className="status-badge status-badge-confirmed">
                     <CheckCircle2 size={12} strokeWidth={2.5} />
-                    Confirmed
+                    Accepted
                   </span>
                 ) : (
                   <span className="status-badge status-badge-pending">

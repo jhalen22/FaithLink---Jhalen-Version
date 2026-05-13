@@ -88,21 +88,28 @@ function Profile() {
 
       {/* ── Stats card (overlaps header) ── */}
       <div className="profile-stats-card">
-        <div className="profile-stat">
-          <strong>{stats.bookings}</strong>
-          <span>{role === "priest" ? "Schedules" : "Bookings"}</span>
-        </div>
-        <div className="profile-stat-divider" />
-        <div className="profile-stat">
-          <strong>₱{stats.donations}</strong>
-          <span>{role === "priest" ? "Duties" : "Donations"}</span>
-        </div>
-        <div className="profile-stat-divider" />
-        <div className="profile-stat">
-          <strong>{stats.events}</strong>
-          <span>Events</span>
-        </div>
+  <div className="profile-stat">
+    <strong>{stats.bookings}</strong>
+    <span>{role === "priest" ? "Schedules" : "Bookings"}</span>
+  </div>
+
+  {role !== "priest" && (
+    <>
+      <div className="profile-stat-divider" />
+      <div className="profile-stat">
+        <strong>₱{stats.donations}</strong>
+        <span>Donations</span>
       </div>
+    </>
+  )}
+
+  <div className="profile-stat-divider" />
+
+  <div className="profile-stat">
+    <strong>{stats.events}</strong>
+    <span>Events</span>
+  </div>
+</div>
 
       {/* ── Menu ── */}
       <div className="profile-menu">

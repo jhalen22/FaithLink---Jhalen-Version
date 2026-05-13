@@ -163,7 +163,10 @@ const documentReviews = uploadedDocuments.map((fileName) => ({
 // GET USER'S OWN BOOKINGS
 router.get("/my-bookings", protect, async (req, res) => {
   try {
-    const bookings = await Booking.find({ parishioner: req.user.id });
+    const bookings = await Booking.find({ parishioner: req.user.id })
+      .populate("assignedPriest", "fullName email role")
+      .sort({ createdAt: -1 });
+
     res.json(bookings);
   } catch (err) {
     res.status(500).json({ message: "Error fetching bookings" });
@@ -287,17 +290,13 @@ router.get("/dashboard/counts", protect, adminOnly, async (req, res) => {
   }
 });
 
-// GET /api/bookings/priest/approved — priest only
-// Returns all approved bookings so the priest can review and confirm availability.
-// Uses an inline role check instead of a separate priestOnly middleware.
-router.get("/priest/approved", protect, async (req, res) => {
+// GET /api/bookings/admin/approved — admin only
+// Returns approved bookings for priest assignment.
+router.get("/admin/approved", protect, adminOnly, async (req, res) => {
   try {
-    if (req.user.role !== "priest") {
-      return res.status(403).json({ message: "Access denied. Priests only." });
-    }
-
     const bookings = await Booking.find({ status: "approved" })
-      .populate("parishioner", "fullName email")
+      .populate("parishioner", "fullName email role")
+      .populate("assignedPriest", "fullName email role")
       .sort({ preferredDate: 1 });
 
     res.json({ bookings });
@@ -309,28 +308,138 @@ router.get("/priest/approved", protect, async (req, res) => {
   }
 });
 
+// PUT /api/bookings/:id/assign-priest — admin only
+router.put("/:id/assign-priest", protect, adminOnly, async (req, res) => {
+  try {
+    const { priestId } = req.body;
+
+    if (!priestId) {
+      return res.status(400).json({ message: "Priest ID is required" });
+    }
+
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    booking.assignedPriest = priestId;
+    booking.priestConfirmationStatus = "pending";
+    booking.priestConfirmedAt = undefined;
+    booking.priestRejectedAt = undefined;
+    booking.priestResponseRemarks = "";
+
+    await booking.save();
+
+    await Notification.create({
+      user: priestId,
+      title: "New Assigned Booking",
+      message: `You have been assigned to a ${booking.sacramentType} booking.`,
+      type: "booking",
+      relatedBooking: booking._id,
+    });
+
+    res.json({ message: "Priest assigned successfully", booking });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to assign priest",
+      error: error.message,
+    });
+  }
+});
+
+// GET /api/bookings/priest/approved — priest only
+// Returns only bookings assigned to the logged-in priest.
+router.get("/priest/approved", protect, async (req, res) => {
+  try {
+    if (req.user.role !== "priest") {
+      return res.status(403).json({ message: "Access denied. Priests only." });
+    }
+
+    const bookings = await Booking.find({
+      status: "approved",
+      assignedPriest: req.user.id,
+    })
+      .populate("parishioner", "fullName email")
+      .populate("assignedPriest", "fullName email")
+      .sort({ preferredDate: 1 });
+
+    res.json({ bookings });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch assigned bookings",
+      error: error.message,
+    });
+  }
+});
+
 // PUT /api/bookings/:id/priest-confirm — priest only
-// Records that the priest has confirmed availability for this booking.
-router.put("/:id/priest-confirm", protect, async (req, res) => {
+// Priest confirms only bookings assigned to them.
+router.put("/:id/priest-accept", protect, async (req, res) => {
   try {
     if (req.user.role !== "priest") {
       return res.status(403).json({ message: "Access denied. Priests only." });
     }
 
     const booking = await Booking.findById(req.params.id);
+
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
     }
 
-    booking.assignedPriest = req.user.id;
-    booking.priestConfirmationStatus = "confirmed";
+    if (!booking.assignedPriest || booking.assignedPriest.toString() !== req.user.id) {
+      return res.status(403).json({ message: "This booking is not assigned to you." });
+    }
+
+    booking.priestConfirmationStatus = "accepted";
     booking.priestConfirmedAt = new Date();
+    booking.priestRejectedAt = undefined;
+
     await booking.save();
 
-    res.json({ message: "Availability confirmed successfully", booking });
+    await Notification.create({
+      user: booking.parishioner,
+      title: "Priest Accepted Booking",
+      message: `The assigned priest has accepted your ${booking.sacramentType} booking.`,
+      type: "booking",
+      relatedBooking: booking._id,
+    });
+
+    res.json({ message: "Booking accepted successfully", booking });
   } catch (error) {
     res.status(500).json({
-      message: "Failed to confirm availability",
+      message: "Failed to accept booking",
+      error: error.message,
+    });
+  }
+});
+
+router.put("/:id/priest-reject", protect, async (req, res) => {
+  try {
+    if (req.user.role !== "priest") {
+      return res.status(403).json({ message: "Access denied. Priests only." });
+    }
+
+    const booking = await Booking.findById(req.params.id);
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    if (!booking.assignedPriest || booking.assignedPriest.toString() !== req.user.id) {
+      return res.status(403).json({ message: "This booking is not assigned to you." });
+    }
+
+    booking.priestConfirmationStatus = "rejected";
+    booking.priestRejectedAt = new Date();
+    booking.assignedPriest = null;
+
+    await booking.save();
+
+    res.json({ message: "Booking rejected by priest", booking });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to reject booking",
       error: error.message,
     });
   }

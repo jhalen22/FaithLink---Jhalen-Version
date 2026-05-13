@@ -10,6 +10,7 @@ import AdminLayout from "./components/AdminLayout";
 /* ── Admin pages (content only — no layout wrapper) ── */
 import AdminDashboard      from "./pages/Admin/AdminDashboard";
 import ManageBookings      from "./pages/Admin/ManageBookings";
+import AssignPriest from "./pages/Admin/AssignPriest";
 import ManageDonations     from "./pages/Admin/ManageDonations";
 import ManageParishioners  from "./pages/Admin/ManageParishioners";
 import ManageStreams        from "./pages/Admin/ManageStreams";
@@ -18,12 +19,14 @@ import ManageMassIntentions from "./pages/Admin/ManageMassIntentions";
 import AdminReports        from "./pages/Admin/AdminReports";
 import AdminSettings       from "./pages/Admin/AdminSettings";
 
+
 /* ── Priest pages ── */
 import PriestDashboard from "./pages/Priest/PriestDashboard";
 import PriestSchedules from "./pages/Priest/PriestSchedules";
 import PriestSeminars  from "./pages/Priest/PriestSeminars";
 import PriestBookings  from "./pages/Priest/PriestBookings";
 import PriestAlerts    from "./pages/Priest/PriestAlerts";
+
 
 /* ── Parishioner / Auth pages ── */
 import Login              from "./pages/Login";
@@ -71,6 +74,7 @@ function App() {
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
           <Route path="dashboard"       element={<AdminDashboard />}       />
           <Route path="bookings"        element={<ManageBookings />}       />
+          <Route path="assign-priest" element={<AssignPriest />} />
           <Route path="mass-intentions" element={<ManageMassIntentions />} />
           <Route path="donations"       element={<ManageDonations />}      />
           <Route path="announcements"   element={<ManageAnnouncements />}  />
